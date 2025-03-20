@@ -6,7 +6,7 @@ ENV PYTHONUNBUFFERED=1
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Set the working directory inside the container
-WORKDIR /app  # Container working directory, use Linux-style path
+WORKDIR /app  
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
