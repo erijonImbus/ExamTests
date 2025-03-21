@@ -7,8 +7,8 @@ pipeline {
     }
 
     environment {
-        EXAM_TESTS_DIR = 'C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam-Copy/ExamTests'  // Vendosni rrugën tuaj të dosjes
-        LOGS_DIR = "${EXAM_TESTS_DIR}/Logs"  // Këtu do të ruhet rezultati i testeve
+        EXAM_TESTS_DIR = 'C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam-Copy/ExamTests'
+        LOGS_DIR = "${EXAM_TESTS_DIR}/Logs"  
     }
 
     stages {
@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     if (fileExists(LOGS_DIR)) {
-                        deleteDir()  // Pastron dosjen Logs nëse ekziston
+                        deleteDir()  
                     }
                     echo "Preparing the environment..."
                 }
@@ -26,14 +26,12 @@ pipeline {
         stage('Build Docker Image') {
     steps {
         script {
-            // Verifikoni instalimin e Docker
+
             bat 'docker --version'
-            
-            // Sigurohuni që Dockerfile është në rrugën e duhur
+
             echo "Building Docker image..."
-            bat 'docker build -t robotframework-test .'  // Përdorni këtë komandë për të ndërtuar imazhin
-            // Ose nëse Dockerfile është në një dosje të veçantë, përdorni:
-            // bat 'docker build -t robotframework-test -f path/to/Dockerfile .'
+            bat 'docker build -t robotframework-test .'
+
         }
     }
 }
@@ -43,14 +41,11 @@ pipeline {
                 script {
                     echo "Running tests with tags: ${params.TAGS}"
 
-                    // Kaloni direktorin nga Jenkins në Docker me -v dhe vendosni direktorin për të ekzekutuar testet
                     def command = "docker run --rm -v ${EXAM_TESTS_DIR}:/usr/src/app/test_cases robotframework-test --tags ${params.TAGS} /usr/src/app/test_cases"
                     echo "Running command: ${command}"
 
-                    // Ekzekuton testet dhe merr log-un
                     def result = bat(script: command, returnStdout: true).trim()
 
-                    // Ruani logun në dosjen e rezultatit
                     writeFile file: "${LOGS_DIR}/robot_output.log", text: result
                     echo "Test results saved to ${LOGS_DIR}/robot_output.log"
                 }
