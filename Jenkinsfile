@@ -30,7 +30,7 @@ pipeline {
                     echo "Running tests with tags: ${params.TAGS}"
 
                     // Find all .robot files in the provided directory
-                    def robotFiles = findFiles(glob: "${EXAM_TESTS_DIR}\\TestCases\\**\\*.robot")
+                    def robotFiles = findFiles(glob: "${EXAM_TESTS_DIR}\\TestCases\\")
 
                     if (robotFiles) {
                         // Loop through each .robot file and run tests
