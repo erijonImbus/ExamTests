@@ -7,8 +7,8 @@ pipeline {
     }
 
     environment {
-        EXAM_TESTS_DIR = 'C:\\Users\\erijon.IMBUS\\Desktop\\RBF-MATERIALS\\Exam - Copy\\ExamTests'  // Path to your ExamTests folder
-        LOGS_DIR = "${EXAM_TESTS_DIR}\\Logs"
+        EXAM_TESTS_DIR = 'C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam - Copy/ExamTests'  // Correct path format for Windows
+        LOGS_DIR = "${EXAM_TESTS_DIR}/Logs"
     }
 
     stages {
@@ -29,8 +29,8 @@ pipeline {
                 script {
                     echo "Running tests with tags: ${params.TAGS}"
 
-                    // Find all .robot files in the provided directory
-                    def robotFiles = findFiles(glob: "${EXAM_TESTS_DIR}\\TestCases\\")
+                    // Find all .robot files in the provided directory using the corrected path format
+                    def robotFiles = findFiles(glob: "${EXAM_TESTS_DIR}/TestCases/**/*.robot")
 
                     if (robotFiles) {
                         // Loop through each .robot file and run tests
@@ -49,14 +49,14 @@ pipeline {
                                 
                                 // Run the actual robot tests with the specified tag
                                 bat """
-                                    robot ${robotFile.name} --tags ${params.TAGS} > ${LOGS_DIR}\\test_${robotFile.name}.log
+                                    robot ${robotFile.name} --tags ${params.TAGS} > ${LOGS_DIR}/test_${robotFile.name}.log
                                 """
                             } else {
                                 echo "Tag '${params.TAGS}' not found in ${robotFile.name}. Skipping file."
                             }
                         }
                     } else {
-                        echo "No .robot files found in ${EXAM_TESTS_DIR}\\TestCases."
+                        echo "No .robot files found in ${EXAM_TESTS_DIR}/TestCases."
                     }
                 }
             }
