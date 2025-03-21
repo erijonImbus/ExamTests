@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        EXAM_TESTS_DIR = 'C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam - Copy/ExamTests'  // Correct path format for Windows
+        EXAM_TESTS_DIR = 'C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam-Copy/ExamTests'  // Correct path format for Windows
         LOGS_DIR = "${EXAM_TESTS_DIR}/Logs"
     }
 
