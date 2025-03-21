@@ -30,15 +30,15 @@ pipeline {
                     echo "Running tests with tags: ${params.TAGS}"
 
                     // Find all .robot files in the provided directory using the corrected path format
-                    def robotFiles = findFiles(glob: "${EXAM_TESTS_DIR}/TestCases/**/*.robot")
+                    def robotFiles = findFiles(glob: "${EXAM_TESTS_DIR}/Test Cases/**/*.robot")
 
                     if (robotFiles) {
                         // Loop through each .robot file and run tests
                         robotFiles.each { robotFile ->
                             echo "Checking tags in file: ${robotFile.name}"
-                            
+
                             // Command to check if the file contains the specified tag
-                            def tagCheckCommand = """robot --dryrun --listtags ${robotFile.name}"""
+                            def tagCheckCommand = """robot --dryrun --listtags "${robotFile.name}""""
                             
                             // Run the dry run to list tags
                             def tagsOutput = bat(script: tagCheckCommand, returnStdout: true).trim()
@@ -49,14 +49,14 @@ pipeline {
                                 
                                 // Run the actual robot tests with the specified tag
                                 bat """
-                                    robot ${robotFile.name} --tags ${params.TAGS} > ${LOGS_DIR}/test_${robotFile.name}.log
+                                    robot "${robotFile.name}" --tags ${params.TAGS} > "${LOGS_DIR}/test_${robotFile.name}.log"
                                 """
                             } else {
                                 echo "Tag '${params.TAGS}' not found in ${robotFile.name}. Skipping file."
                             }
                         }
                     } else {
-                        echo "No .robot files found in ${EXAM_TESTS_DIR}/TestCases."
+                        echo "No .robot files found in ${EXAM_TESTS_DIR}/Test Cases."
                     }
                 }
             }
