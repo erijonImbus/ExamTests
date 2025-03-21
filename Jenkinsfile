@@ -11,7 +11,7 @@ pipeline {
 
     environment {
         // Define the location of your ExamTests folder with Windows-style paths (but use / for GLOB patterns)
-        EXAM_TESTS_DIR = 'C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam - Copy/ExamTests'
+        EXAM_TESTS_DIR = 'C:\\Users\\erijon.IMBUS\\Desktop\\RBF-MATERIALS\\Exam - Copy\\ExamTests'
         LOGS_DIR = "${EXAM_TESTS_DIR}/Logs"
     }
 
