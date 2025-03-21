@@ -1,5 +1,4 @@
-# Use official Jenkins image as the base
-FROM jenkins/jenkins:lts
+FROM python:3.9-slim
 
 # Switch to root user to install dependencies
 USER root
@@ -17,14 +16,17 @@ RUN apt-get update && apt-get install -y \
 # Install Java (Jenkins requires it)
 RUN apt-get install -y openjdk-11-jdk
 
-# Switch back to Jenkins user
-USER jenkins
+WORKDIR C:\Users\erijon.IMBUS\Desktop\RBF-MATERIALS\Exam-Copy\ExamTests
 
-# Set environment variables for Robot Framework logging
-ENV ROBOT_OUTPUT_DIR=/var/jenkins_home/robot_output
+# Set environment variable for logs and test directory
+ENV EXAM_TESTS_DIR=C:\Users\erijon.IMBUS\Desktop\RBF-MATERIALS\Exam-Copy\ExamTests\TestCases
+ENV LOGS_DIR=C:\Users\erijon.IMBUS\Desktop\RBF-MATERIALS\Exam-Copy\ExamTests\Logs
 
-# Expose the Jenkins port
+# Expose port (optional, if needed for Jenkins to interact with Docker container)
 EXPOSE 8080
 
-# Set default Jenkins home directory
-VOLUME /var/jenkins_home
+# Command to run Robot Framework tests (to be overridden in Jenkinsfile)
+ENTRYPOINT ["robot"]
+
+# Default command (this can be overridden in Jenkins pipeline)
+CMD ["--help"]
