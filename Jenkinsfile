@@ -4,6 +4,9 @@ pipeline {
     parameters {
         // Optional parameter to specify tags for filtering tests
         string(name: 'TAGS', defaultValue: '', description: 'Comma-separated tags to filter tests (leave empty to run all tests)')
+        
+        // Parameter to specify the cron schedule for the build
+        string(name: 'BUILD_TIME', defaultValue: 'H 2 * * 1-5', description: 'Cron schedule to trigger the build periodically (default: H 2 * * 1-5)')
     }
 
     environment {
@@ -57,8 +60,8 @@ pipeline {
         }
     }
 
-    // Periodic build trigger - configure the Jenkins job to build periodically (this will go in Jenkins job configuration, not in Jenkinsfile)
+    // Periodic build trigger using the parameterized cron schedule
     triggers {
-        cron('H 2 * * 1-5')  // Example: This cron syntax will schedule the build to run every weekday at 2 AM
+        cron("${params.BUILD_TIME}") // Uses the BUILD_TIME parameter to define the schedule
     }
 }
