@@ -16,11 +16,11 @@ RUN apt-get update && apt-get install -y \
 # Install Java (Jenkins requires it)
 RUN apt-get install -y openjdk-11-jdk
 
-WORKDIR C:\Users\erijon.IMBUS\Desktop\RBF-MATERIALS\Exam-Copy\ExamTests
+WORKDIR C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam-Copy/ExamTests
 
 # Set environment variable for logs and test directory
-ENV EXAM_TESTS_DIR=C:\Users\erijon.IMBUS\Desktop\RBF-MATERIALS\Exam-Copy\ExamTests\TestCases
-ENV LOGS_DIR=C:\Users\erijon.IMBUS\Desktop\RBF-MATERIALS\Exam-Copy\ExamTests\Logs
+ENV EXAM_TESTS_DIR=C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam-Copy/ExamTests/TestCases
+ENV LOGS_DIR=C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam-Copy/ExamTests/Logs
 
 # Expose port (optional, if needed for Jenkins to interact with Docker container)
 EXPOSE 8080
