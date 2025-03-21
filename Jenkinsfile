@@ -7,8 +7,8 @@ pipeline {
     }
 
     environment {
-        EXAM_TESTS_DIR = 'C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam - Copy/ExamTests'
-        LOGS_DIR = "${EXAM_TESTS_DIR}/Logs"
+        EXAM_TESTS_DIR = 'C:\\Users\\erijon.IMBUS\\Desktop\\RBF-MATERIALS\\Exam - Copy\\ExamTests'  // Path to your ExamTests folder
+        LOGS_DIR = "${EXAM_TESTS_DIR}\\Logs"
     }
 
     stages {
@@ -29,9 +29,9 @@ pipeline {
                 script {
                     echo "Running tests with tags: ${params.TAGS}"
 
-                    // Correct the glob pattern to look for .robot files
-                    def testFiles = findFiles(glob: "${EXAM_TESTS_DIR}/TestCases/**/*.robot")
-                    
+                    // Correct the glob pattern to look for .robot files (with double backslashes)
+                    def testFiles = findFiles(glob: "${EXAM_TESTS_DIR}\\TestCases\\**\\*.robot")
+
                     // Check if test files are found and then run tests
                     if (testFiles) {
                         testFiles.each { testFile ->
