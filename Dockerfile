@@ -2,14 +2,14 @@
 FROM python:3.9-slim
 
 # 2. Krijojmë një direktori pune brenda konteinerit, që do të përdoret për ekzekutimin e komandave
-WORKDIR /usr/src/app
+WORKDIR C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam-Copy/ExamTests
 
 # 3. Përditësojmë pip dhe instalojmë Robot Framework dhe Selenium
 RUN pip install --upgrade pip && \
     pip install robotframework selenium
 
 # 4. Kopjojmë skedarët nga mjedisi i jashtëm (për shembull, skedarët e testeve nga Jenkins) në direktorinë e punës
-COPY . /usr/src/app
+COPY . C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam-Copy/ExamTests/TestCases
 
 # 5. Vendosim që të ekzekutojmë komandën robot kur konteineri të nisë
 ENTRYPOINT ["robot"]
