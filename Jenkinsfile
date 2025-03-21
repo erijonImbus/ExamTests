@@ -10,9 +10,9 @@ pipeline {
     }
 
     environment {
-        // Define the location of your ExamTests folder with Windows-style paths
-        EXAM_TESTS_DIR = 'C:\\Users\\erijon.IMBUS\\Desktop\\RBF-MATERIALS\\Exam - Copy\\ExamTests'
-        LOGS_DIR = "${EXAM_TESTS_DIR}\\Logs"
+        // Define the location of your ExamTests folder with Windows-style paths (but use / for GLOB patterns)
+        EXAM_TESTS_DIR = 'C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam - Copy/ExamTests'
+        LOGS_DIR = "${EXAM_TESTS_DIR}/Logs"
     }
 
     stages {
@@ -36,13 +36,13 @@ pipeline {
                     echo "Running tests with tags: ${params.TAGS}"
 
                     // Loop through all test files in TestCases directory and execute them
-                    def testFiles = findFiles(glob: "${EXAM_TESTS_DIR}\\TestCases\\**\\*.resource")
+                    def testFiles = findFiles(glob: "${EXAM_TESTS_DIR}/TestCases/**/*.resource")
                     testFiles.each { testFile ->
                         // Run the test file with specified tags
                         echo "Executing test file: ${testFile.name}"
                         sh """
                             # Command to execute tests, assuming a hypothetical test runner (e.g., Maven, Gradle, etc.)
-                            test-runner --test ${testFile.name} ${tagFilter} > ${LOGS_DIR}\\test_${testFile.name}.log
+                            test-runner --test ${testFile.name} ${tagFilter} > ${LOGS_DIR}/test_${testFile.name}.log
                         """
                     }
                 }
@@ -54,7 +54,7 @@ pipeline {
                 script {
                     // Archive the test results logs in the Logs folder
                     echo "Archiving test results..."
-                    archiveArtifacts allowEmptyArchive: true, artifacts: 'Logs\\**\\*.log', fingerprint: true
+                    archiveArtifacts allowEmptyArchive: true, artifacts: 'Logs/**/*.log', fingerprint: true
                 }
             }
         }
