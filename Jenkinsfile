@@ -24,19 +24,19 @@ pipeline {
         }
 
         stage('Build Docker Image') {
-            steps {
-                script {
-                    // Verify Docker installation
-                    bat 'docker --version'
-                    
-                    // Përdorim 'bat' në vend të 'sh' për Windows
-                    echo "Building Docker image..."
-                    bat 'docker build -t robotframework-test .'  // Make sure Dockerfile is at the root
-                    // Or, if Dockerfile is in another directory, specify its path:
-                    // bat 'docker build -t robotframework-test -f docker/Dockerfile .'  
-                }
-            }
+    steps {
+        script {
+            // Verifikoni instalimin e Docker
+            bat 'docker --version'
+            
+            // Sigurohuni që Dockerfile është në rrugën e duhur
+            echo "Building Docker image..."
+            bat 'docker build -t robotframework-test .'  // Përdorni këtë komandë për të ndërtuar imazhin
+            // Ose nëse Dockerfile është në një dosje të veçantë, përdorni:
+            // bat 'docker build -t robotframework-test -f path/to/Dockerfile .'
         }
+    }
+}
 
         stage('Run Tests') {
             steps {
