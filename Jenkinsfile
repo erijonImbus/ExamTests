@@ -38,15 +38,15 @@ pipeline {
                             echo "Checking tags in file: ${robotFile.name}"
 
                             // Command to check if the file contains the specified tag
-                            def tagCheckCommand = """robot --dryrun --listtags "${robotFile.name}""""
-                            
+                            def tagCheckCommand = "robot --dryrun --listtags \"${robotFile.name}\""
+
                             // Run the dry run to list tags
                             def tagsOutput = bat(script: tagCheckCommand, returnStdout: true).trim()
 
                             // Check if the desired tag exists in the file's tags list
                             if (tagsOutput.contains(params.TAGS)) {
                                 echo "Running tests on ${robotFile.name} with tag: ${params.TAGS}"
-                                
+
                                 // Run the actual robot tests with the specified tag
                                 bat """
                                     robot "${robotFile.name}" --tags ${params.TAGS} > "${LOGS_DIR}/test_${robotFile.name}.log"
