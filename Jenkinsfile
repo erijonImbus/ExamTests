@@ -7,19 +7,28 @@ pipeline {
     }
 
     environment {
-        EXAM_TESTS_DIR = 'C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam-Copy/ExamTests'  // Correct path format for Windows
-        LOGS_DIR = "${EXAM_TESTS_DIR}/Logs"
+        EXAM_TESTS_DIR = 'C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam-Copy/ExamTests'  // Vendosni rrugën tuaj të dosjes
+        LOGS_DIR = "${EXAM_TESTS_DIR}/Logs"  // Këtu do të ruhet rezultati i testeve
     }
 
     stages {
         stage('Prepare') {
             steps {
                 script {
-                    // Clean up logs folder before running the tests
                     if (fileExists(LOGS_DIR)) {
-                        deleteDir() // Clean up the Logs folder
+                        deleteDir()  // Pastron dosjen Logs nëse ekziston
                     }
                     echo "Preparing the environment..."
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Krijon imazhin Docker nga Dockerfile
+                    echo "Building Docker image..."
+                    sh 'docker build -t robotframework-test .'  // Komanda për ndërtimin e imazhit
                 }
             }
         }
@@ -29,35 +38,16 @@ pipeline {
                 script {
                     echo "Running tests with tags: ${params.TAGS}"
 
-                    // Find all .robot files in the provided directory using the corrected path format
-                    def robotFiles = findFiles(glob: "${EXAM_TESTS_DIR}/Test Cases/**/*.robot")
+                    // Kaloni direktorin nga Jenkins në Docker me -v dhe vendosni direktorin për të ekzekutuar testet
+                    def command = "docker run --rm -v ${EXAM_TESTS_DIR}:/usr/src/app/test_cases robotframework-test --tags ${params.TAGS} /usr/src/app/test_cases"
+                    echo "Running command: ${command}"
 
-                    if (robotFiles) {
-                        // Loop through each .robot file and run tests
-                        robotFiles.each { robotFile ->
-                            echo "Checking tags in file: ${robotFile.name}"
+                    // Ekzekuton testet dhe merr log-un
+                    def result = sh(script: command, returnStdout: true).trim()
 
-                            // Command to check if the file contains the specified tag
-                            def tagCheckCommand = "robot --dryrun --listtags \"${robotFile.name}\""
-
-                            // Run the dry run to list tags
-                            def tagsOutput = bat(script: tagCheckCommand, returnStdout: true).trim()
-
-                            // Check if the desired tag exists in the file's tags list
-                            if (tagsOutput.contains(params.TAGS)) {
-                                echo "Running tests on ${robotFile.name} with tag: ${params.TAGS}"
-
-                                // Run the actual robot tests with the specified tag
-                                bat """
-                                    robot "${robotFile.name}" --tags ${params.TAGS} > "${LOGS_DIR}/test_${robotFile.name}.log"
-                                """
-                            } else {
-                                echo "Tag '${params.TAGS}' not found in ${robotFile.name}. Skipping file."
-                            }
-                        }
-                    } else {
-                        echo "No .robot files found in ${EXAM_TESTS_DIR}/Test Cases."
-                    }
+                    // Ruani logun në dosjen e rezultatit
+                    writeFile file: "${LOGS_DIR}/robot_output.log", text: result
+                    echo "Test results saved to ${LOGS_DIR}/robot_output.log"
                 }
             }
         }
