@@ -26,9 +26,9 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Krijon imazhin Docker nga Dockerfile
+                    // Përdorim 'bat' në vend të 'sh' për Windows
                     echo "Building Docker image..."
-                    sh 'docker build -t robotframework-test .'  // Komanda për ndërtimin e imazhit
+                    bat 'docker build -t robotframework-test .'  // Komanda për ndërtimin e imazhit
                 }
             }
         }
@@ -43,7 +43,7 @@ pipeline {
                     echo "Running command: ${command}"
 
                     // Ekzekuton testet dhe merr log-un
-                    def result = sh(script: command, returnStdout: true).trim()
+                    def result = bat(script: command, returnStdout: true).trim()
 
                     // Ruani logun në dosjen e rezultatit
                     writeFile file: "${LOGS_DIR}/robot_output.log", text: result
