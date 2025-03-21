@@ -1,74 +1,64 @@
 pipeline {
-    agent any  // Use any available agent (you can change this to a specific agent if needed)
+    agent any
+
+    parameters {
+        // Optional parameter to specify tags for filtering tests
+        string(name: 'TAGS', defaultValue: '', description: 'Comma-separated tags to filter tests (leave empty to run all tests)')
+    }
 
     environment {
-        // Set the Docker image name
-        DOCKER_IMAGE = 'robot-framework-tests'
-        RESULTS_DIR = 'C://Users//erijon.IMBUS//Desktop//RBF-MATERIALS//Exam - Copy//ExamTests//Logs'
+        // Define the location of your ExamTests folder
+        EXAM_TESTS_DIR = 'C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam - Copy/ExamTests'
+        LOGS_DIR = "${EXAM_TESTS_DIR}/Logs"
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                // Checkout the code from your Git repository
-                checkout scm
-            }
-        }
-
-        stage('Build Docker Image') {
+        stage('Prepare') {
             steps {
                 script {
-                    // Build the Docker image for running the Robot Framework tests
-                    echo "Building Docker image: ${DOCKER_IMAGE}"
-                    sh 'docker build -t ${DOCKER_IMAGE} .'
+                    // Clean up logs folder before running the tests
+                    if (fileExists(LOGS_DIR)) {
+                        deleteDir() // Clean up the Logs folder
+                    }
+                    echo "Preparing the environment..."
                 }
             }
         }
 
-        stage('Run Tests in Docker') {
+        stage('Run Tests') {
             steps {
                 script {
-                    // Run the Docker container with Robot Framework
-                    echo "Running Robot Framework tests inside Docker container"
-                    sh """
-                    docker run --rm -v \$(pwd):/app ${DOCKER_IMAGE}
-                    """
+                    // Determine the command to run tests, considering the provided tags
+                    def tagFilter = params.TAGS ? "--tags ${params.TAGS}" : ""
+                    echo "Running tests with tags: ${params.TAGS}"
+
+                    // Loop through all test files in TestCases directory and execute them
+                    def testFiles = findFiles(glob: "${EXAM_TESTS_DIR}/TestCases/**/*.resource")
+                    testFiles.each { testFile ->
+                        // Run the test file with specified tags
+                        echo "Executing test file: ${testFile.name}"
+                        sh """
+                            # Command to execute tests, assuming a hypothetical test runner (e.g., Maven, Gradle, etc.)
+                            test-runner --test ${testFile.name} ${tagFilter} > ${LOGS_DIR}/test_${testFile.name}.log
+                        """
+                    }
                 }
             }
         }
 
-        stage('Publish Results') {
+        stage('Archive Results') {
             steps {
                 script {
-                    // Archive the test results directory
-                    echo "Archiving test results"
-                    archiveArtifacts allowEmptyArchive: true, artifacts: "${RESULTS_DIR}/**", onlyIfSuccessful: true
-                }
-            }
-        }
-
-        stage('Publish HTML Report') {
-            steps {
-                script {
-                    // Optionally, you can publish the test report (HTML) to Jenkins UI
-                    echo "Publishing HTML report"
-                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "${RESULTS_DIR}", reportFiles: 'log.html', reportName: 'Robot Framework Test Report'])
+                    // Archive the test results logs in the Logs folder
+                    echo "Archiving test results..."
+                    archiveArtifacts allowEmptyArchive: true, artifacts: 'Logs/**/*.log', fingerprint: true
                 }
             }
         }
     }
 
-    post {
-        always {
-            // Clean up resources or Docker images after the pipeline
-            echo 'Cleaning up Docker images'
-            sh 'docker rmi ${DOCKER_IMAGE}'
-        }
-        success {
-            echo 'Test run completed successfully'
-        }
-        failure {
-            echo 'Test run failed'
-        }
+    // Periodic build trigger - configure the Jenkins job to build periodically (this will go in Jenkins job configuration, not in Jenkinsfile)
+    triggers {
+        cron('H 2 * * 1-5')  // Example: This cron syntax will schedule the build to run every weekday at 2 AM
     }
 }
