@@ -26,9 +26,14 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    // Verify Docker installation
+                    bat 'docker --version'
+                    
                     // Përdorim 'bat' në vend të 'sh' për Windows
                     echo "Building Docker image..."
-                    bat 'docker build -t robotframework-test .'  // Komanda për ndërtimin e imazhit
+                    bat 'docker build -t robotframework-test .'  // Make sure Dockerfile is at the root
+                    // Or, if Dockerfile is in another directory, specify its path:
+                    // bat 'docker build -t robotframework-test -f docker/Dockerfile .'  
                 }
             }
         }

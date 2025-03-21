@@ -8,5 +8,11 @@ WORKDIR /usr/src/app
 RUN pip install --upgrade pip && \
     pip install robotframework selenium
 
-# 4. Vendosim që të ekzekutojmë komandën robot kur konteineri të nisë
+# 4. Kopjojmë skedarët nga mjedisi i jashtëm (për shembull, skedarët e testeve nga Jenkins) në direktorinë e punës
+COPY . /usr/src/app
+
+# 5. Vendosim që të ekzekutojmë komandën robot kur konteineri të nisë
 ENTRYPOINT ["robot"]
+
+# 6. Komanda e ekzekutimit të testeve, duke përdorur një argument për të kaluar rrugën e testeve
+CMD ["/usr/src/app/test_cases"]
