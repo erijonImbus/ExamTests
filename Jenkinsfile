@@ -29,20 +29,34 @@ pipeline {
                 script {
                     echo "Running tests with tags: ${params.TAGS}"
 
-                    // Correct the glob pattern to look for .robot files (with double backslashes)
-                    def testFiles = findFiles(glob: "${EXAM_TESTS_DIR}\\TestCases\\**\\*.robot")
+                    // Find all .robot files in the provided directory
+                    def robotFiles = findFiles(glob: "${EXAM_TESTS_DIR}\\TestCases\\**\\*.robot")
 
-                    // Check if test files are found and then run tests
-                    if (testFiles) {
-                        testFiles.each { testFile ->
-                            echo "Executing test file: ${testFile.name}"
-                            // Run the tests using a batch command (for Windows)
-                            bat """
-                                robot ${testFile.name} --tags ${params.TAGS} > ${LOGS_DIR}\\test_${testFile.name}.log
-                            """
+                    if (robotFiles) {
+                        // Loop through each .robot file and run tests
+                        robotFiles.each { robotFile ->
+                            echo "Checking tags in file: ${robotFile.name}"
+                            
+                            // Command to check if the file contains the specified tag
+                            def tagCheckCommand = """robot --dryrun --listtags ${robotFile.name}"""
+                            
+                            // Run the dry run to list tags
+                            def tagsOutput = bat(script: tagCheckCommand, returnStdout: true).trim()
+
+                            // Check if the desired tag exists in the file's tags list
+                            if (tagsOutput.contains(params.TAGS)) {
+                                echo "Running tests on ${robotFile.name} with tag: ${params.TAGS}"
+                                
+                                // Run the actual robot tests with the specified tag
+                                bat """
+                                    robot ${robotFile.name} --tags ${params.TAGS} > ${LOGS_DIR}\\test_${robotFile.name}.log
+                                """
+                            } else {
+                                echo "Tag '${params.TAGS}' not found in ${robotFile.name}. Skipping file."
+                            }
                         }
                     } else {
-                        echo "No test files found."
+                        echo "No .robot files found in ${EXAM_TESTS_DIR}\\TestCases."
                     }
                 }
             }
