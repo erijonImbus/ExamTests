@@ -7,7 +7,7 @@ Test Teardown    Close Browser Proggres Bar
 
 *** Test Cases ***
 Test Progress Bar Start/Stop At 75 Percentage 
-    [Tags]    smoke
+    [Tags]    smoke    pc001
     Valid Progress Bar Page
     Click Start Button And Stop Button At 75Percent
     

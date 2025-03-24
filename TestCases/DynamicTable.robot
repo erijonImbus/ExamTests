@@ -6,7 +6,7 @@ Test Teardown    Close Browser Dynamic Table
 
 *** Test Cases ***
 Compare Chrome CPU-s Values For Equality
-    [Tags]    smoke
+    [Tags]    smoke    pc001
     Valid Dynamic Table Page
     Chrome CPU Value Comparisson
     Sleep    3s
