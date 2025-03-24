@@ -56,7 +56,7 @@ pipeline {
             def command = """
                 docker run --rm \
                 -v ${testCasesDirDockerFormatted}:/usr/src/app/ExamTests/TestCases \
-                robotframework-test --tags ${params.TAGS} /usr/src/app/ExamTests/TestCases
+                robotframework-test:latest --tags ${params.TAGS} /usr/src/app/ExamTests/TestCases
             """
 
             echo "Running command: ${command}"
@@ -70,6 +70,7 @@ pipeline {
         }
     }
 }
+
 
 
 
