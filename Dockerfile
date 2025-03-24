@@ -1,13 +1,12 @@
 # Use an official Python runtime as a parent image
 FROM python:3.9-slim
 
-# Install required packages (Python, pip, Robot Framework, and OpenJDK 11)
+# Install required packages (Python, pip, Robot Framework, and other dependencies)
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
     python3-dev \
     build-essential \
-    openjdk-11-jdk \
     && pip3 install --upgrade pip \
     && pip3 install robotframework \
     && apt-get clean \
