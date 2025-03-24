@@ -53,7 +53,7 @@ pipeline {
             def testCasesDirDocker = "${EXAM_TESTS_DIR}/TestCases"
             
             // Construct the Docker command to run Robot Framework tests
-            def command = "docker run --rm -v ${testCasesDirDocker}:${testCasesDirDocker} robotframework-test --tags ${params.TAGS} ${testCasesDirDocker}"
+            def command = "docker run --rm -v ${testCasesDirDocker} robotframework-test --tags ${params.TAGS} ${testCasesDirDocker}"
 
             echo "Running command: ${command}"
 
