@@ -30,18 +30,27 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
-            steps {
-                script {
-                    echo "Running tests with tags: ${params.TAGS}"
+  stage('Run Tests') {
+    steps {
+        script {
+            echo "Running tests with tags: ${params.TAGS}"
 
-                    // Replace sh with bat for Windows compatibility
-                    bat """
-                    docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --dryrun --outputdir /app/output/dryrun /app"
-                    """
-                }
+            // Check if the TAGS parameter is set
+            if (params.TAGS) {
+                // If TAGS is set, run tests with the specified tags using --include
+                bat """
+                docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --dryrun --outputdir /app/output/dryrun --include ${params.TAGS} /app"
+                """
+            } else {
+                // If TAGS is not set, run all tests
+                bat """
+                docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --dryrun --outputdir /app/output/dryrun /app"
+                """
             }
         }
+    }
+}
+
 
         stage('Archive Results') {
             steps {
