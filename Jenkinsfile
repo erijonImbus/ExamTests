@@ -45,23 +45,28 @@ pipeline {
         }
 
         stage('Run Tests') {
-            steps {
-                script {
-                    echo "Running tests with tags: ${params.TAGS}"
+    steps {
+        script {
+            echo "Running tests with tags: ${params.TAGS}"
 
-                    // Construct the docker command to run Robot Framework tests
-                    def command = "docker run --rm -v ${EXAM_TESTS_DIR}:${EXAM_TESTS_DIR} robotframework-test --tags ${params.TAGS} ${EXAM_TESTS_DIR}\\TestCases"
-                    echo "Running command: ${command}"
+            // Make sure to convert the Windows paths to Unix paths for Docker
+            def examTestsDirUnix = EXAM_TESTS_DIR.replaceAll("\\\\", "/") // Convert to Unix-style path
+            def logsDirUnix = LOGS_DIR.replaceAll("\\\\", "/") // Convert to Unix-style path
 
-                    // Run the command and capture the output
-                    def result = bat(script: command, returnStdout: true).trim()  // Use 'bat' for Windows agents
+            // Construct the docker command to run Robot Framework tests
+            def command = "docker run --rm -v ${examTestsDirUnix}:${examTestsDirUnix} robotframework-test --tags ${params.TAGS} ${examTestsDirUnix}/TestCases"
+            echo "Running command: ${command}"
 
-                    // Save the output to the logs directory
-                    writeFile file: "${LOGS_DIR}\\robot_output.log", text: result
-                    echo "Test results saved to ${LOGS_DIR}\\robot_output.log"
-                }
-            }
+            // Run the command and capture the output
+            def result = bat(script: command, returnStdout: true).trim()  // Use 'bat' for Windows agents
+
+            // Save the output to the logs directory
+            writeFile file: "${logsDirUnix}/robot_output.log", text: result
+            echo "Test results saved to ${logsDirUnix}/robot_output.log"
         }
+    }
+}
+
 
         stage('Archive Results') {
             steps {
