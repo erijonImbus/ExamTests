@@ -45,7 +45,7 @@ pipeline {
         }
 
         stage('Run Tests') {
-    steps {
+        steps {
         script {
             echo "Running tests with tags: ${params.TAGS}"
 
@@ -55,8 +55,11 @@ pipeline {
             // Ensure drive letter format for Docker (handle C: drive)
             examTestsDirDocker = "C:/${examTestsDirDocker.substring(2)}" // Remove 'C:' and prepend with Docker's C:/ format
 
+            // Correct the volume mounting for only the TestCases directory
+            def testCasesDirDocker = "${examTestsDirDocker}/TestCases"
+            
             // Construct the Docker command to run Robot Framework tests
-            def command = "docker run --rm -v ${examTestsDirDocker}:${examTestsDirDocker} robotframework-test --tags ${params.TAGS} ${examTestsDirDocker}/TestCases"
+            def command = "docker run --rm -v ${testCasesDirDocker}:${testCasesDirDocker} robotframework-test --tags ${params.TAGS} ${testCasesDirDocker}"
 
             echo "Running command: ${command}"
 
@@ -69,6 +72,7 @@ pipeline {
         }
     }
 }
+
 
 
 
