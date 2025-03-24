@@ -1,19 +1,17 @@
 # Use an official Python runtime as a parent image
 FROM python:3.9-slim
 
-# Install required packages (Python, pip, Robot Framework, and other dependencies)
+# Install required packages (Python, pip, Robot Framework, and OpenJDK 11)
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
     python3-dev \
     build-essential \
-    software-properties-common \
-    && add-apt-repository ppa:openjdk-r/ppa \
-    && apt-get update \
-    && apt-get install -y openjdk-11-jdk \
+    openjdk-11-jdk \
     && pip3 install --upgrade pip \
     && pip3 install robotframework \
-    && apt-get clean
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory inside the container (adjusting to your project structure)
 WORKDIR /usr/src/app
