@@ -1,4 +1,3 @@
-
 FROM python:3.11-slim
 
 # Set environment variables to avoid Python buffering and for easier troubleshooting
@@ -33,8 +32,10 @@ RUN curl -sSL https://dl.google.com/linux/direct/google-chrome-stable_current_am
     && rm google-chrome.deb
 
 # Install ChromeDriver by automatically matching it to the installed Google Chrome version
-RUN CHROME_VERSION=$(google-chrome --version | sed 's/Google Chrome //g' | sed 's/\..*//') \
-    && wget https://chromedriver.storage.googleapis.com/$(CHROME_VERSION)/chromedriver_linux64.zip -O chromedriver.zip \
+RUN google-chrome --version \
+    && CHROME_VERSION=$(google-chrome --version | sed 's/Google Chrome //g' | sed 's/\..*//') \
+    && echo "Installing ChromeDriver version: $CHROME_VERSION" \
+    && wget https://chromedriver.storage.googleapis.com/$CHROME_VERSION/chromedriver_linux64.zip -O chromedriver.zip \
     && unzip chromedriver.zip -d /usr/local/bin/ \
     && rm chromedriver.zip
 
