@@ -8,8 +8,8 @@ pipeline {
 
     environment {
         // Adjust paths to match Docker container paths
-        EXAM_TESTS_DIR = 'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\ExamTests'
-        LOGS_DIR = "${EXAM_TESTS_DIR}\\Logs"
+        EXAM_TESTS_DIR = 'C:/ProgramData/Jenkins/.jenkins/workspace/ExamTests'
+        LOGS_DIR = "${EXAM_TESTS_DIR}/Logs"
     }
 
     stages {
@@ -49,14 +49,8 @@ pipeline {
         script {
             echo "Running tests with tags: ${params.TAGS}"
 
-            // Convert EXAM_TESTS_DIR to Docker-compatible path (Unix-style)
-            def examTestsDirDocker = EXAM_TESTS_DIR.replaceAll("\\\\", "/") // Convert Windows backslashes to forward slashes
-
-            // Ensure drive letter format for Docker (handle C: drive)
-            examTestsDirDocker = "C:/${examTestsDirDocker.substring(2)}" // Remove 'C:' and prepend with Docker's C:/ format
-
             // Correct the volume mounting for only the TestCases directory
-            def testCasesDirDocker = "${examTestsDirDocker}/TestCases"
+            def testCasesDirDocker = "${EXAM_TESTS_DIR}/TestCases"
             
             // Construct the Docker command to run Robot Framework tests
             def command = "docker run --rm -v ${testCasesDirDocker}:${testCasesDirDocker} robotframework-test --tags ${params.TAGS} ${testCasesDirDocker}"
