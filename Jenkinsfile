@@ -8,7 +8,7 @@ pipeline {
 
     environment {
         // Adjust paths to match Docker container paths
-        EXAM_TESTS_DIR = 'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\ExamTests\\ExamTests'
+        EXAM_TESTS_DIR = 'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\ExamTests'
         LOGS_DIR = "${EXAM_TESTS_DIR}\\Logs"
     }
 
@@ -59,7 +59,7 @@ pipeline {
             def testCasesDirDocker = "${examTestsDirDocker}/TestCases"
             
             // Construct the Docker command to run Robot Framework tests
-            def command = "docker run --rm -v ${testCasesDirDocker} robotframework-test --tags ${params.TAGS} ${testCasesDirDocker}"
+            def command = "docker run --rm -v ${testCasesDirDocker}:${testCasesDirDocker} robotframework-test --tags ${params.TAGS} ${testCasesDirDocker}"
 
             echo "Running command: ${command}"
 
@@ -72,11 +72,6 @@ pipeline {
         }
     }
 }
-
-
-
-
-
 
         stage('Archive Results') {
             steps {
