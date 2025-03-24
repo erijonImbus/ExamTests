@@ -7,28 +7,15 @@ pipeline {
     }
 
     environment {
-        // Adjust paths to match Docker container paths
-        EXAM_TESTS_DIR = 'C:/ProgramData/Jenkins/.jenkins/workspace/ExamTests'
-        LOGS_DIR = "${EXAM_TESTS_DIR}\\Logs"
+        // Define Docker image and version variables
+        IMAGE = "robotframework-docker-test"
+        VERSION = "1.0"
     }
 
     stages {
-        stage('Verify Docker') {
-            steps {
-                script {
-                    echo "Verifying Docker installation on the Jenkins node..."
-                    // For Windows agents, use 'bat' instead of 'sh'
-                    bat 'docker --version'
-                }
-            }
-        }
-
         stage('Prepare') {
             steps {
                 script {
-                    if (fileExists(LOGS_DIR)) {
-                        deleteDir()  // Remove existing logs
-                    }
                     echo "Preparing the environment..."
                 }
             }
@@ -38,7 +25,7 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker image..."
-                    bat 'docker build -t robotframework-test .'  // Use 'bat' for Windows agents
+                    bat "docker build -t ${IMAGE}:${VERSION} ."  // Build the Docker image with tag ${IMAGE}:${VERSION}
                 }
             }
         }
@@ -48,28 +35,11 @@ pipeline {
                 script {
                     echo "Running tests with tags: ${params.TAGS}"
 
-                    // Correct the volume mounting for only the TestCases directory
-                    def testCasesDirDocker = "//c/ProgramData/Jenkins/.jenkins/workspace/ExamTests/TestCases" // Adjust path for Docker
+                    sh '''
+                    docker run --rm -v $WORKSPACE:/app ${IMAGE}:${VERSION} bash -c "robot --dryrun --outputdir /app/output/dryrun /app"
+        
+                 '''
 
-                    // Start building the Docker command
-                    def command = "docker run --rm -v ${testCasesDirDocker}:/usr/src/app/ExamTests/TestCases robotframework-test:latest"
-
-                    // Only append --tags if TAGS is provided
-                    if (params.TAGS?.trim()) {
-                        command += " --tags ${params.TAGS}"
-                    }
-
-                    // Add the test case directory to the command
-                    command += " /usr/src/app/ExamTests/TestCases"
-
-                    echo "Running command: ${command}"
-
-                    // Run the command and capture the output
-                    def result = bat(script: command, returnStdout: true).trim()  // Use 'bat' for Windows agents
-
-                    // Save the output to the logs directory (using the defined LOGS_DIR)
-                    writeFile file: "${LOGS_DIR}\\robot_output.log", text: result
-                    echo "Test results saved to ${LOGS_DIR}\\robot_output.log"
                 }
             }
         }

@@ -1,32 +1,47 @@
-# Use an official Python runtime as a parent image
-FROM python:3.9-slim
+# Use Python 3.11 as the base image
+FROM python:3.11-slim
 
-# Install required packages (Python, pip, Robot Framework, and other dependencies)
+# Set environment variables to avoid Python buffering and for easier troubleshooting
+ENV PYTHONUNBUFFERED=1
+ENV LANG=C.UTF-8
+
+# Install dependencies for Selenium, Chrome, and ChromeDriver
 RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip \
-    python3-dev \
-    build-essential \
-    && pip3 install --upgrade pip \
-    && pip3 install robotframework \
-    && apt-get clean \
+    wget \
+    curl \
+    gnupg \
+    ca-certificates \
+    unzip \
+    libx11-dev \
+    libxcomposite-dev \
+    libxrandr-dev \
+    libgtk-3-0 \
+    libgbm-dev \
+    libnss3 \
+    libasound2 \
+    libappindicator3-1 \
+    libxtst6 \
+    libxss1 \
+    libgdk-pixbuf2.0-0 \
+    libsecret-1-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Set the working directory inside the container (adjusting to your project structure)
-WORKDIR /usr/src/app
+# Install Google Chrome (latest stable version)
+RUN curl -sSL https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o google-chrome.deb \
+    && apt-get update && apt-get install -y ./google-chrome.deb \
+    && rm google-chrome.deb
 
-# Expose port (optional, if needed for Jenkins to interact with Docker container)
-EXPOSE 8080
+# Download and install ChromeDriver (make sure the version matches the installed Chrome version)
+RUN CHROME_VERSION=$(google-chrome --version | sed 's/Google Chrome //g' | sed 's/\..*//') \
+    && wget https://chromedriver.storage.googleapis.com/$CHROME_VERSION.0/chromedriver_linux64.zip \
+    && unzip chromedriver_linux64.zip -d /usr/local/bin/ \
+    && rm chromedriver_linux64.zip
 
-# Set environment variables for paths (adjust to the Unix-style paths)
-ENV EXAM_TESTS_DIR=/usr/src/app/ExamTests
-ENV TEST_CASES_DIR=/usr/src/app/ExamTests/TestCases
-ENV RESOURCES_DIR=/usr/src/app/ExamTests/Resources
-ENV IMPORTS_DIR=/usr/src/app/ExamTests/Resources/Imports
-ENV LOGS_DIR=/usr/src/app/ExamTests/Logs
+# Set the working directory
+WORKDIR /app
 
-# Command to run Robot Framework tests (this will be overridden in Jenkinsfile)
-ENTRYPOINT ["robot"]
+# Copy your requirements.txt file to the container
+COPY python_requirements.txt .
 
-# Default command (this can be overridden in Jenkins pipeline)
-CMD ["--help"]
+# Install Python dependencies from the requirements file
+RUN pip install --no-cache-dir -r python_requirements.txt
