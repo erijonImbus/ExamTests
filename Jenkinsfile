@@ -42,35 +42,38 @@ pipeline {
         }
 
         stage('Run Tests') {
-    steps {
-        script {
-            echo "Running tests with tags: ${params.TAGS}"
+            steps {
+                script {
+                    echo "Running tests with tags: ${params.TAGS}"
 
-            // Use the already built Docker image and adjust the volume mounting format
-            def testCasesDirDocker = "C:/ProgramData/Jenkins/.jenkins/workspace/ExamTests/TestCases"
-            
-            // Convert the Windows path to Docker's expected format
-            def testCasesDirDockerFormatted = testCasesDirDocker.replace("C:/", "//c/")
+                    // Use the already built Docker image and adjust the volume mounting format
+                    def testCasesDirDocker = "C:/ProgramData/Jenkins/.jenkins/workspace/ExamTests/TestCases"
+                    
+                    // Convert the Windows path to Docker's expected format
+                    def testCasesDirDockerFormatted = testCasesDirDocker.replace("C:/", "//c/")
 
-            // Build a simpler Docker command to run Robot Framework tests
-            def command = """
-                docker run --rm \
-                -v ${testCasesDirDockerFormatted}:/usr/src/app/ExamTests/TestCases \
-                robotframework-test:latest --tags ${params.TAGS} /usr/src/app/ExamTests/TestCases
-            """
+                    // Start building the Docker command
+                    def command = "docker run --rm -v ${testCasesDirDockerFormatted}:/usr/src/app/ExamTests/TestCases robotframework-test:latest"
 
-            echo "Running command: ${command}"
+                    // Only append --tags if TAGS is provided
+                    if (params.TAGS?.trim()) {
+                        command += " --tags ${params.TAGS}"
+                    }
 
-            // Run the command and capture the output
-            def result = bat(script: command, returnStdout: true).trim()
+                    // Add the test case directory to the command
+                    command += " /usr/src/app/ExamTests/TestCases"
 
-            // Save the output to the logs directory
-            writeFile file: "${LOGS_DIR}\\robot_output.log", text: result
-            echo "Test results saved to ${LOGS_DIR}\\robot_output.log"
+                    echo "Running command: ${command}"
+
+                    // Run the command and capture the output
+                    def result = bat(script: command, returnStdout: true).trim()
+
+                    // Save the output to the logs directory
+                    writeFile file: "${LOGS_DIR}\\robot_output.log", text: result
+                    echo "Test results saved to ${LOGS_DIR}\\robot_output.log"
+                }
+            }
         }
-    }
-}
-
 
 
 
