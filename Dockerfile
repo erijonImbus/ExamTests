@@ -1,7 +1,5 @@
+# Use an official Python runtime as a parent image
 FROM python:3.9-slim
-
-# Switch to root user to install dependencies
-USER root
 
 # Install required packages (Python, pip, Robot Framework, and other dependencies)
 RUN apt-get update && apt-get install -y \
@@ -9,7 +7,10 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     python3-dev \
     build-essential \
-    openjdk-11-jdk \
+    software-properties-common \
+    && add-apt-repository ppa:openjdk-r/ppa \
+    && apt-get update \
+    && apt-get install -y openjdk-11-jdk \
     && pip3 install --upgrade pip \
     && pip3 install robotframework \
     && apt-get clean
