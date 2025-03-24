@@ -7,7 +7,6 @@ pipeline {
     }
 
     environment {
-        // Adjust paths to match Docker container paths
         EXAM_TESTS_DIR = 'C:/ProgramData/Jenkins/.jenkins/workspace/ExamTests'
         LOGS_DIR = "${EXAM_TESTS_DIR}/Logs"
     }
@@ -17,7 +16,6 @@ pipeline {
             steps {
                 script {
                     echo "Verifying Docker installation on the Jenkins node..."
-                    // For Windows agents, use 'bat' instead of 'sh'
                     bat 'docker --version'
                 }
             }
@@ -37,7 +35,6 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Check Docker version
                     echo "Building Docker image..."
                     bat 'docker build -t robotframework-test .'  // Use 'bat' for Windows agents
                 }
@@ -45,27 +42,27 @@ pipeline {
         }
 
         stage('Run Tests') {
-        steps {
-        script {
-            echo "Running tests with tags: ${params.TAGS}"
+            steps {
+                script {
+                    echo "Running tests with tags: ${params.TAGS}"
 
-            // Correct the volume mounting for only the TestCases directory
-            def testCasesDirDocker = "${EXAM_TESTS_DIR}/TestCases"
-            
-            // Construct the Docker command to run Robot Framework tests
-            def command = "docker run --rm -v ${testCasesDirDocker} robotframework-test --tags ${params.TAGS} ${testCasesDirDocker}"
+                    // Correct the volume mounting for only the TestCases directory
+                    def testCasesDirDocker = "${EXAM_TESTS_DIR}/TestCases"
+                    
+                    // Construct the Docker command to run Robot Framework tests
+                    def command = "docker run --rm -v ${testCasesDirDocker}:${testCasesDirDocker} robotframework-test --tags ${params.TAGS} ${testCasesDirDocker}"
 
-            echo "Running command: ${command}"
+                    echo "Running command: ${command}"
 
-            // Run the command and capture the output
-            def result = bat(script: command, returnStdout: true).trim()  // Use 'bat' for Windows agents
+                    // Run the command and capture the output
+                    def result = bat(script: command, returnStdout: true).trim()  // Use 'bat' for Windows agents
 
-            // Save the output to the logs directory (using the defined LOGS_DIR)
-            writeFile file: "${LOGS_DIR}\\robot_output.log", text: result
-            echo "Test results saved to ${LOGS_DIR}\\robot_output.log"
+                    // Save the output to the logs directory (using the defined LOGS_DIR)
+                    writeFile file: "${LOGS_DIR}\\robot_output.log", text: result
+                    echo "Test results saved to ${LOGS_DIR}\\robot_output.log"
+                }
+            }
         }
-    }
-}
 
         stage('Archive Results') {
             steps {
