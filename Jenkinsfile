@@ -62,11 +62,12 @@ pipeline {
             def result = bat(script: command, returnStdout: true).trim()  // Use 'bat' for Windows agents
 
             // Save the output to the logs directory (using the defined LOGS_DIR)
-            writeFile file: "${LOGS_DIR}/robot_output.log", text: result
-            echo "Test results saved to ${LOGS_DIR}/robot_output.log"
+            writeFile file: "${LOGS_DIR}\\robot_output.log", text: result
+            echo "Test results saved to ${LOGS_DIR}\\robot_output.log"
         }
     }
 }
+
 
 
 
