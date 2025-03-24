@@ -4,7 +4,7 @@ FROM python:3.11-slim
 # Set environment variables to avoid Python buffering and for easier troubleshooting
 ENV PYTHONUNBUFFERED=1
 ENV LANG=C.UTF-8
-ENV DEBIAN_FRONTEND=noninteractive  
+ENV DEBIAN_FRONTEND=noninteractive  # Prevent interactive prompts during apt-get install
 
 # Install dependencies for Selenium, Chrome, and ChromeDriver
 RUN apt-get update && apt-get install -y \
@@ -32,11 +32,9 @@ RUN curl -sSL https://dl.google.com/linux/direct/google-chrome-stable_current_am
     && apt-get update && apt-get install -y ./google-chrome.deb \
     && rm google-chrome.deb
 
-# Get the Chrome version installed
-RUN CHROME_VERSION=$(google-chrome --version | sed 's/Google Chrome //g' | sed 's/\..*//')
-
-# Download and install the matching ChromeDriver version
-RUN wget https://chromedriver.storage.googleapis.com/$(CHROME_VERSION)/chromedriver_linux64.zip -O chromedriver.zip \
+# Install ChromeDriver by automatically matching it to the installed Google Chrome version
+RUN CHROME_VERSION=$(google-chrome --version | sed 's/Google Chrome //g' | sed 's/\..*//') \
+    && wget https://chromedriver.storage.googleapis.com/$(CHROME_VERSION)/chromedriver_linux64.zip -O chromedriver.zip \
     && unzip chromedriver.zip -d /usr/local/bin/ \
     && rm chromedriver.zip
 
@@ -48,4 +46,3 @@ COPY python_requirements.txt .
 
 # Install Python dependencies from the requirements file
 RUN pip install --no-cache-dir -r python_requirements.txt
-
