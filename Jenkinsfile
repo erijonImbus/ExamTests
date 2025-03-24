@@ -42,27 +42,31 @@ pipeline {
         }
 
         stage('Run Tests') {
-            steps {
-                script {
-                    echo "Running tests with tags: ${params.TAGS}"
+    steps {
+        script {
+            echo "Running tests with tags: ${params.TAGS}"
+            
+            // Correct the volume mounting for TestCases directory
+            def testCasesDirDocker = "C:/ProgramData/Jenkins/.jenkins/workspace/ExamTests/TestCases"
+            
+            // Adjust for Windows Docker path format
+            def testCasesDirDockerFormatted = testCasesDirDocker.replace("C:/", "//c/")
 
-                    // Correct the volume mounting for only the TestCases directory
-                    def testCasesDirDocker = "${EXAM_TESTS_DIR}/TestCases"
-                    
-                    // Construct the Docker command to run Robot Framework tests
-                    def command = "docker run --rm -v ${testCasesDirDocker}:${testCasesDirDocker} robotframework-test --tags ${params.TAGS} ${testCasesDirDocker}"
+            // Construct the Docker command to run Robot Framework tests
+            def command = "docker run --rm -v ${testCasesDirDockerFormatted}:${testCasesDirDocker} robotframework-test --tags ${params.TAGS} ${testCasesDirDocker}"
 
-                    echo "Running command: ${command}"
+            echo "Running command: ${command}"
 
-                    // Run the command and capture the output
-                    def result = bat(script: command, returnStdout: true).trim()  // Use 'bat' for Windows agents
+            // Run the command and capture the output
+            def result = bat(script: command, returnStdout: true).trim()  // Use 'bat' for Windows agents
 
-                    // Save the output to the logs directory (using the defined LOGS_DIR)
-                    writeFile file: "${LOGS_DIR}\\robot_output.log", text: result
-                    echo "Test results saved to ${LOGS_DIR}\\robot_output.log"
-                }
-            }
+            // Save the output to the logs directory (using the defined LOGS_DIR)
+            writeFile file: "${LOGS_DIR}\\robot_output.log", text: result
+            echo "Test results saved to ${LOGS_DIR}\\robot_output.log"
         }
+    }
+}
+
 
         stage('Archive Results') {
             steps {
