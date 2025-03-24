@@ -35,11 +35,10 @@ pipeline {
                 script {
                     echo "Running tests with tags: ${params.TAGS}"
 
-                    sh '''
-                    docker run --rm -v $WORKSPACE:/app ${IMAGE}:${VERSION} bash -c "robot --dryrun --outputdir /app/output/dryrun /app"
-        
-                 '''
-
+                    // Replace sh with bat for Windows compatibility
+                    bat """
+                    docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --dryrun --outputdir /app/output/dryrun /app"
+                    """
                 }
             }
         }
