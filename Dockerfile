@@ -9,23 +9,25 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     python3-dev \
     build-essential \
+    openjdk-11-jdk \
     && pip3 install --upgrade pip \
     && pip3 install robotframework \
     && apt-get clean
 
-# Install Java (Jenkins requires it)
-RUN apt-get install -y openjdk-11-jdk
-
-WORKDIR C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam-Copy/ExamTests
-
-# Set environment variable for logs and test directory
-ENV EXAM_TESTS_DIR=C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam-Copy/ExamTests/TestCases
-ENV LOGS_DIR=C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam-Copy/ExamTests/Logs
+# Set the working directory inside the container (adjusting to your project structure)
+WORKDIR /usr/src/app
 
 # Expose port (optional, if needed for Jenkins to interact with Docker container)
 EXPOSE 8080
 
-# Command to run Robot Framework tests (to be overridden in Jenkinsfile)
+# Set environment variables for paths (adjust to the Unix-style paths)
+ENV EXAM_TESTS_DIR=/usr/src/app/ExamTests
+ENV TEST_CASES_DIR=/usr/src/app/ExamTests/TestCases
+ENV RESOURCES_DIR=/usr/src/app/ExamTests/Resources
+ENV IMPORTS_DIR=/usr/src/app/ExamTests/Resources/Imports
+ENV LOGS_DIR=/usr/src/app/ExamTests/Logs
+
+# Command to run Robot Framework tests (this will be overridden in Jenkinsfile)
 ENTRYPOINT ["robot"]
 
 # Default command (this can be overridden in Jenkins pipeline)

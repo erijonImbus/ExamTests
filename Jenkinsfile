@@ -7,8 +7,9 @@ pipeline {
     }
 
     environment {
-        EXAM_TESTS_DIR = 'C:/Users/erijon.IMBUS/Desktop/RBF-MATERIALS/Exam-Copy/ExamTests'
-        LOGS_DIR = "${EXAM_TESTS_DIR}/Logs"  
+        // Adjust paths to match Docker container paths
+        EXAM_TESTS_DIR = '/usr/src/app/ExamTests'
+        LOGS_DIR = "${EXAM_TESTS_DIR}/Logs"
     }
 
     stages {
@@ -42,7 +43,7 @@ pipeline {
                     echo "Running tests with tags: ${params.TAGS}"
 
                     // Construct the docker command to run Robot Framework tests
-                    def command = "docker run --rm -v ${EXAM_TESTS_DIR}:/usr/src/app/test_cases robotframework-test --tags ${params.TAGS} /usr/src/app/test_cases"
+                    def command = "docker run --rm -v ${EXAM_TESTS_DIR}:/usr/src/app/ExamTests robotframework-test --tags ${params.TAGS} /usr/src/app/ExamTests/TestCases"
                     echo "Running command: ${command}"
 
                     // Run the command and capture the output
