@@ -8,8 +8,8 @@ pipeline {
 
     environment {
         // Adjust paths to match Docker container paths
-        EXAM_TESTS_DIR = '/usr/src/app/ExamTests'
-        LOGS_DIR = "${EXAM_TESTS_DIR}/Logs"
+        EXAM_TESTS_DIR = 'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\ExamTests\\ExamTests'
+        LOGS_DIR = "${EXAM_TESTS_DIR}\\Logs"
     }
 
     stages {
@@ -17,8 +17,8 @@ pipeline {
             steps {
                 script {
                     echo "Verifying Docker installation on the Jenkins node..."
-                    // Verify Docker installation and show version (Linux example)
-                    sh 'docker --version'  // Use `bat 'docker --version'` for Windows-based Jenkins agent
+                    // For Windows agents, use 'bat' instead of 'sh'
+                    bat 'docker --version'
                 }
             }
         }
@@ -39,7 +39,7 @@ pipeline {
                 script {
                     // Check Docker version
                     echo "Building Docker image..."
-                    sh 'docker build -t robotframework-test .'  // Use `bat` for Windows agents
+                    bat 'docker build -t robotframework-test .'  // Use 'bat' for Windows agents
                 }
             }
         }
@@ -50,15 +50,15 @@ pipeline {
                     echo "Running tests with tags: ${params.TAGS}"
 
                     // Construct the docker command to run Robot Framework tests
-                    def command = "docker run --rm -v ${EXAM_TESTS_DIR}:${EXAM_TESTS_DIR} robotframework-test --tags ${params.TAGS} ${EXAM_TESTS_DIR}/TestCases"
+                    def command = "docker run --rm -v ${EXAM_TESTS_DIR}:${EXAM_TESTS_DIR} robotframework-test --tags ${params.TAGS} ${EXAM_TESTS_DIR}\\TestCases"
                     echo "Running command: ${command}"
 
                     // Run the command and capture the output
-                    def result = sh(script: command, returnStdout: true).trim()  // `sh` for Linux, `bat` for Windows agents
+                    def result = bat(script: command, returnStdout: true).trim()  // Use 'bat' for Windows agents
 
                     // Save the output to the logs directory
-                    writeFile file: "${LOGS_DIR}/robot_output.log", text: result
-                    echo "Test results saved to ${LOGS_DIR}/robot_output.log"
+                    writeFile file: "${LOGS_DIR}\\robot_output.log", text: result
+                    echo "Test results saved to ${LOGS_DIR}\\robot_output.log"
                 }
             }
         }
