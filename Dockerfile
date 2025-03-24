@@ -1,10 +1,10 @@
-# Use Python 3.11 as the base image
+
 FROM python:3.11-slim
 
 # Set environment variables to avoid Python buffering and for easier troubleshooting
 ENV PYTHONUNBUFFERED=1
 ENV LANG=C.UTF-8
-ENV DEBIAN_FRONTEND=noninteractive  # Prevent interactive prompts during apt-get install
+ENV DEBIAN_FRONTEND=noninteractive  
 
 # Install dependencies for Selenium, Chrome, and ChromeDriver
 RUN apt-get update && apt-get install -y \
