@@ -51,11 +51,13 @@ pipeline {
 
             // Convert EXAM_TESTS_DIR to Docker-compatible path (Unix-style)
             def examTestsDirDocker = EXAM_TESTS_DIR.replaceAll("\\\\", "/") // Convert Windows backslashes to forward slashes
-            // Ensure drive letter format for Docker
-            examTestsDirDocker = "C:/${examTestsDirDocker.substring(2)}" // Handle the C: drive properly
 
-            // Construct the docker command to run Robot Framework tests
+            // Ensure drive letter format for Docker (handle C: drive)
+            examTestsDirDocker = "C:/${examTestsDirDocker.substring(2)}" // Remove 'C:' and prepend with Docker's C:/ format
+
+            // Construct the Docker command to run Robot Framework tests
             def command = "docker run --rm -v ${examTestsDirDocker}:${examTestsDirDocker} robotframework-test --tags ${params.TAGS} ${examTestsDirDocker}/TestCases"
+
             echo "Running command: ${command}"
 
             // Run the command and capture the output
@@ -67,6 +69,7 @@ pipeline {
         }
     }
 }
+
 
 
 
