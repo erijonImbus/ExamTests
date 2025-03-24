@@ -45,27 +45,32 @@ pipeline {
     steps {
         script {
             echo "Running tests with tags: ${params.TAGS}"
-            
-            // Correct the volume mounting for TestCases directory
+
+            // Use the already built Docker image and adjust the volume mounting format
             def testCasesDirDocker = "C:/ProgramData/Jenkins/.jenkins/workspace/ExamTests/TestCases"
             
-            // Adjust for Windows Docker path format
+            // Convert the Windows path to Docker's expected format
             def testCasesDirDockerFormatted = testCasesDirDocker.replace("C:/", "//c/")
 
-            // Construct the Docker command to run Robot Framework tests
-            def command = "docker run --rm -v ${testCasesDirDockerFormatted}:${testCasesDirDocker} robotframework-test --tags ${params.TAGS} ${testCasesDirDocker}"
+            // Build a simpler Docker command to run Robot Framework tests
+            def command = """
+                docker run --rm \
+                -v ${testCasesDirDockerFormatted}:/usr/src/app/ExamTests/TestCases \
+                robotframework-test --tags ${params.TAGS} /usr/src/app/ExamTests/TestCases
+            """
 
             echo "Running command: ${command}"
 
             // Run the command and capture the output
-            def result = bat(script: command, returnStdout: true).trim()  // Use 'bat' for Windows agents
+            def result = bat(script: command, returnStdout: true).trim()
 
-            // Save the output to the logs directory (using the defined LOGS_DIR)
+            // Save the output to the logs directory
             writeFile file: "${LOGS_DIR}\\robot_output.log", text: result
             echo "Test results saved to ${LOGS_DIR}\\robot_output.log"
         }
     }
 }
+
 
 
         stage('Archive Results') {
