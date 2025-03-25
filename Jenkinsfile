@@ -26,18 +26,20 @@ pipeline {
                 script {
                     def dockerChanged = false
 
-                    // Check if Dockerfile or any file relevant to the Docker image has changed
-                    def dockerFiles = ['Dockerfile', 'path/to/related/files/*'] // Add more files/folders here if needed
+                    // List of critical files that affect the Docker build
+                    def dockerFiles = ['Dockerfile', 'path/to/dependencies/*', 'path/to/other/files/*']
+                    
+                    // Check if Dockerfile or any file relevant to the build has changed
                     dockerFiles.each { file ->
                         if (isChanged(file)) {
                             dockerChanged = true
                         }
                     }
 
+                    // Rebuild Docker image only if relevant files have changed
                     if (dockerChanged) {
                         echo "Docker-related files have changed, rebuilding Docker image..."
-                        // Rebuild the Docker image only if the Docker-related files have changed
-                        bat "docker build -t ${IMAGE}:${VERSION} ."
+                        bat "docker build -t ${IMAGE}:${VERSION} ."  // Rebuild the Docker image
                     } else {
                         echo "No changes detected in Docker-related files. Skipping image rebuild."
                     }
@@ -110,8 +112,7 @@ pipeline {
 
 // Helper function to check if a file has changed
 def isChanged(file) {
-    // Implement logic to check if the file has changed. 
-    // For example, you could use Git commands to check if a file has been modified since the last commit.
+    // This checks if the file has been changed by comparing it against the latest commit
     def gitStatus = bat(script: "git diff --name-only HEAD~1..HEAD -- ${file}", returnStdout: true).trim()
     return gitStatus.contains(file)
 }
