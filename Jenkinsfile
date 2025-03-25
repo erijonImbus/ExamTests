@@ -50,23 +50,13 @@ pipeline {
                 }
             }
         }
-
-        stage('Archive Results') {
-            steps {
-                script {
-                    echo "Archiving test results..."
-                    // Archive the logs for later inspection
-                    archiveArtifacts allowEmptyArchive: true, artifacts: 'Logs/**/*.log', fingerprint: true
-                }
-            }
-        }
     }
 
     post {
         always {
             script {
                 // Ensure the output directory is present
-                def outputDir = 'output/dryrun'
+                def outputDir = 'output'
                 
                 // Archive the output XML and HTML files for Robot Framework logs
                 echo "Saving HTML and XML test results..."
@@ -94,6 +84,6 @@ pipeline {
     }
 
     triggers {
-        cron("${params.BUILD_TIME ?: 'H * * * 1-5'}")
+        cron("${params.BUILD_TIME ?: 'H 2 * * 1-5'}")
     }
 }
