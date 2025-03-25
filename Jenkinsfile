@@ -26,11 +26,11 @@ pipeline {
                     def dockerFilesChanged = false
                     
                     // List of files that impact Docker build
-                    def dockerFiles = ['Dockerfile', 'python_requirements.txt', 'path/to/dependency/file1', 'path/to/dependency/file2']
+                    def dockerFiles = ['Dockerfile', 'python_requirements.txt']
                     
                     // Check for changes in Docker-related files since the last commit
                     dockerFiles.each { file ->
-                        def gitDiff = sh(script: "git diff --name-only HEAD~1..HEAD -- ${file}", returnStdout: true).trim()
+                        def gitDiff = bat(script: "git diff --name-only HEAD~1..HEAD -- ${file}", returnStdout: true).trim()
                         if (gitDiff) {
                             dockerFilesChanged = true
                         }
