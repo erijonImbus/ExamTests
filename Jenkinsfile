@@ -24,11 +24,7 @@ pipeline {
             steps {
                 script {
                     def dockerFilesChanged = false
-                    
-                    // List of files that impact Docker build
                     def dockerFiles = ['Dockerfile', 'python_requirements.txt']
-                    
-                    // Check for changes in Docker-related files since the last commit
                     dockerFiles.each { file ->
                         def gitDiff = bat(script: "git diff --name-only HEAD~1..HEAD -- ${file}", returnStdout: true).trim()
                         if (gitDiff) {
@@ -36,10 +32,9 @@ pipeline {
                         }
                     }
 
-                    // Rebuild the Docker image only if changes are detected
                     if (dockerFilesChanged) {
                         echo "Docker-related files have changed, rebuilding Docker image..."
-                        bat "docker build -t ${IMAGE}:${VERSION} ."  // Rebuild the Docker image
+                        bat "docker build -t ${IMAGE}:${VERSION} ."
                     } else {
                         echo "No changes detected in Docker-related files. Skipping Docker image build."
                     }
@@ -54,11 +49,11 @@ pipeline {
 
                     if (params.TAGS) {
                         bat """
-                        docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --dryrun --outputdir /app/output/dryrun --include ${params.TAGS} /app"
+                        docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --loglevel DEBUG --outputdir /app/output --include ${params.TAGS} /app"
                         """
                     } else {
                         bat """
-                        docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --dryrun --outputdir /app/output/dryrun /app"
+                        docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --loglevel DEBUG --outputdir /app/output /app"
                         """
                     }
                 }
@@ -69,7 +64,7 @@ pipeline {
             steps {
                 script {
                     echo "Archiving test logs..."
-                    archiveArtifacts allowEmptyArchive: true, artifacts: 'Logs/**/*.log', fingerprint: true
+                    archiveArtifacts allowEmptyArchive: true, artifacts: 'output/**/*.log', fingerprint: true
                 }
             }
         }
@@ -78,7 +73,7 @@ pipeline {
     post {
         always {
             script {
-                def outputDir = 'output/dryrun'
+                def outputDir = 'output'
                 echo "Saving HTML and XML test results..."
 
                 if (fileExists("${outputDir}/output.xml")) {
@@ -93,7 +88,7 @@ pipeline {
 
                 publishHTML(target: [
                     reportName: 'Robot Framework Test Report',
-                    reportDir: "${outputDir}",
+                    reportDir: "${WORKSPACE}/output",  // Adjust this path if necessary
                     reportFiles: 'report.html',
                     keepAll: true
                 ])
