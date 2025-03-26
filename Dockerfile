@@ -34,15 +34,12 @@ RUN curl -sSL https://dl.google.com/linux/direct/google-chrome-stable_current_am
 # Install ChromeDriver by automatically matching it to the installed Google Chrome version
 RUN google-chrome --version \
     && CHROME_VERSION=$(google-chrome --version | sed 's/Google Chrome //g' | sed 's/\..*//') \
-    && echo "Installed Chrome version: $CHROME_VERSION" \
-    && CHROMEDRIVER_VERSION="134.0.6998.165" \
-    && echo "Installing ChromeDriver version: $CHROMEDRIVER_VERSION" \
-    && wget https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip -O chromedriver.zip \
+    && echo "Installing ChromeDriver version: $CHROME_VERSION" \
+    # Attempt to get the corresponding ChromeDriver version
+    && wget https://chromedriver.storage.googleapis.com/$CHROME_VERSION/chromedriver_linux64.zip -O chromedriver.zip \
+    || (echo "Exact ChromeDriver version not found. Falling back to a compatible version." && wget https://chromedriver.storage.googleapis.com/113.0.5672.63/chromedriver_linux64.zip -O chromedriver.zip) \
     && unzip chromedriver.zip -d /usr/local/bin/ \
     && rm chromedriver.zip
-
-# Ensure chromedriver has execute permissions
-RUN chmod +x /usr/local/bin/chromedriver
 
 # Set the working directory
 WORKDIR /app
