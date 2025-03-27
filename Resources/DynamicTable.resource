@@ -10,7 +10,18 @@ ${CHROME_CPU_CELL}            //div[span[contains(text(),'Chrome')]]//span[conta
 
 *** Keywords ***
 Open Browser Dynamic Table
-    Open Browser    ${DynamicTable_URL}    ${BROWSER}
+    IF    "${BROWSER}" == "headlesschrome"
+           ${chrome_options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
+            Call Method    ${chrome_options}    add_argument    --headless
+            Call Method    ${chrome_options}    add_argument    --disable-gpu
+            Call Method    ${chrome_options}    add_argument    --no-sandbox
+            Call Method    ${chrome_options}    add_argument    --disable-dev-shm-usage
+            Call Method    ${chrome_options}    add_argument    --window-size\=1920,1080
+            Open Browser    ${URL}    ${BROWSER}    options=${chrome_options}
+    ELSE
+        Open Browser    ${DynamicTable_URL}    ${BROWSER}  
+    END
+      
     Maximize Browser Window
 
 Close Browser Dynamic Table
