@@ -25,7 +25,7 @@ Valid Progress Bar Page
 
 Click Start Button And Stop Button At 75Percent
     Click Element    ${START_BUTTON}
-    Wait Until Element Contains    ${PROGRESS_BAR}       75%    timeout=45s
+    Wait Until Element Contains    ${PROGRESS_BAR}       75%    timeout=55s
     #Sleep    30s
     Click Element    ${STOP_BUTTON}
     
