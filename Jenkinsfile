@@ -66,22 +66,23 @@ pipeline {
         }
 
                 stage('Run Test Cases') {
-            steps {
-                script {
-                    echo "Running tests with tags: ${params.TAGS}"
+    steps {
+        script {
+            echo "Running tests with tags: ${params.TAGS}"
 
-                    if (params.TAGS) {
-                        bat """
-                        docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --outputdir /app/output/run -v BROWSER:headlesschrome --include ${params.TAGS} /app"
-                        """
-                    } else {
-                        bat """
-                        docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --outputdir /app/output/run -v BROWSER:headlesschrome /app"
-                        """
-                    }
-                }
+            if (params.TAGS) {
+                bat """
+                docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --outputdir /app/output/run -v BROWSER:headlesschrome --include ${params.TAGS} /app"
+                """
+            } else {
+                bat """
+                docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --outputdir /app/output/run -v BROWSER:headlesschrome /app"
+                """
             }
         }
+    }
+}
+
 
         stage('Archive Logs') {
             steps {

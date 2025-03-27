@@ -27,7 +27,10 @@ RUN apt-get update && apt-get install -y \
     libvulkan1 \
     xdg-utils \
     fonts-liberation \
+    libxi6 \
+    libgconf-2-4 \
     && rm -rf /var/lib/apt/lists/*
+
 
 # Install Google Chrome stable version
 RUN curl -LO https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
