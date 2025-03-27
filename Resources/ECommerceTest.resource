@@ -22,15 +22,15 @@ Add Products To Cart
     ${total_products}    Get Length    ${products}
     Log    Found ${total_products} products
     Run Keyword If    ${number_of_products} < ${total_products}    Fail    Requested more products than available
-    FOR    ${i}    IN RANGE    ${number_of_products}
-        ${current_product}    Get WebElement    ${PRODUCT_TITLE_XPATH}[${i}]
-        Wait Until Page Contains Element    ${current_product}
-        Click Element    ${current_product}
-        Wait Until Element Is Visible    xpath=${ADD_TO_CART_XPATH}
-        Click Element    xpath=${ADD_TO_CART_XPATH}
-        Handle Alert
-        Go To    ${URLi}
-    END
+        FOR    ${i}    IN RANGE    ${number_of_products}
+            ${current_product}    Get WebElement    ${PRODUCT_TITLE_XPATH}[${i}]
+            Wait Until Page Contains Element    ${current_product}
+            Click Element    ${current_product}
+            Wait Until Element Is Visible    xpath=${ADD_TO_CART_XPATH}
+            Click Element    xpath=${ADD_TO_CART_XPATH}
+            Handle Alert
+            Go To    ${URLi}
+        END
 
 Navigate To Checkout
     Click Element    xpath=${CART_XPATH}

@@ -5,8 +5,8 @@ Test Teardown    Close All Browsers
 
 *** Test Cases ***
 Add Multiple Products To Cart
-    [Tags]    work01
+    [Tags]    pc001
     Set Selenium Speed    0.5s
-    Add Products To Cart    3  # Adjust this number based on available products
+    Add Products To Cart    3          # Adjust this number based on available products
     Navigate To Checkout
     Validate Products In Checkout
