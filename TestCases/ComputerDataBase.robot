@@ -10,7 +10,7 @@ ${BROWSER_DB}    chrome
 *** Test Cases ***
 Tabular Of Scraped Computer Data
     [Documentation]    Scraped computer data from the website and loging it as a nested dictionary.
-    [Tags]    smoke    pc001
+    [Tags]    smoke    work01
     ${Computers}          Get Computer Data
     Log Computer Data     &{Computers}
     Log    ${Computers}

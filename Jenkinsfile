@@ -29,7 +29,7 @@ pipeline {
                     def dockerFiles = ['Dockerfile', 'python_requirements.txt']
                     
                     // Check for changes in Docker-related files since the last commit
-                    dockerFiles.each { file ->
+                    dockerFiles.each { file -> 
                         def gitDiff = bat(script: "git diff --name-only HEAD~1..HEAD -- ${file}", returnStdout: true).trim()
                         if (gitDiff) {
                             dockerFilesChanged = true
@@ -65,30 +65,38 @@ pipeline {
             }
         }
 
-                stage('Run Test Cases') {
-    steps {
-        script {
-            echo "Running tests with tags: ${params.TAGS}"
-
-            if (params.TAGS) {
-                bat """
-                docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --outputdir /app/output/run -v BROWSER:headlesschrome --include ${params.TAGS} /app"
-                """
-            } else {
-                bat """
-                docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --outputdir /app/output/run -v BROWSER:headlesschrome /app"
-                """
-            }
-        }
-    }
-}
-
-
-        stage('Archive Logs') {
+        stage('Run Test Cases') {
             steps {
                 script {
-                    echo "Archiving test logs..."
-                    archiveArtifacts allowEmptyArchive: true, artifacts: 'Logs/**/*.log', fingerprint: true
+                    echo "Running tests with tags: ${params.TAGS}"
+
+                    if (params.TAGS) {
+                        bat """
+                        docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --outputdir /app/output/run -v BROWSER:headlesschrome --include ${params.TAGS} /app"
+                        """
+                    } else {
+                        bat """
+                        docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --outputdir /app/output/run -v BROWSER:headlesschrome /app"
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Archive Logs - Dryrun') {
+            steps {
+                script {
+                    echo "Archiving test logs from Dryrun..."
+                    archiveArtifacts allowEmptyArchive: true, artifacts: 'output/dryrun/**/*.log', fingerprint: true
+                }
+            }
+        }
+
+        stage('Archive Logs - Run Test Cases') {
+            steps {
+                script {
+                    echo "Archiving test logs from Run Test Cases..."
+                    archiveArtifacts allowEmptyArchive: true, artifacts: 'output/run/**/*.log', fingerprint: true
                 }
             }
         }
@@ -97,22 +105,42 @@ pipeline {
     post {
         always {
             script {
-                def outputDir = 'output/dryrun'
+                def dryRunOutputDir = 'output/dryrun'
+                def runOutputDir = 'output/run'
                 echo "Saving HTML and XML test results..."
 
-                if (fileExists("${outputDir}/output.xml")) {
-                    archiveArtifacts artifacts: "${outputDir}/output.xml", allowEmptyArchive: true
+                // Archiving and publishing results from the Dryrun stage
+                if (fileExists("${dryRunOutputDir}/output.xml")) {
+                    archiveArtifacts artifacts: "${dryRunOutputDir}/output.xml", allowEmptyArchive: true
                 }
-                if (fileExists("${outputDir}/report.html")) {
-                    archiveArtifacts artifacts: "${outputDir}/report.html", allowEmptyArchive: true
+                if (fileExists("${dryRunOutputDir}/report.html")) {
+                    archiveArtifacts artifacts: "${dryRunOutputDir}/report.html", allowEmptyArchive: true
                 }
-                if (fileExists("${outputDir}/log.html")) {
-                    archiveArtifacts artifacts: "${outputDir}/log.html", allowEmptyArchive: true
+                if (fileExists("${dryRunOutputDir}/log.html")) {
+                    archiveArtifacts artifacts: "${dryRunOutputDir}/log.html", allowEmptyArchive: true
+                }
+
+                // Archiving and publishing results from the Run Test Cases stage
+                if (fileExists("${runOutputDir}/output.xml")) {
+                    archiveArtifacts artifacts: "${runOutputDir}/output.xml", allowEmptyArchive: true
+                }
+                if (fileExists("${runOutputDir}/report.html")) {
+                    archiveArtifacts artifacts: "${runOutputDir}/report.html", allowEmptyArchive: true
+                }
+                if (fileExists("${runOutputDir}/log.html")) {
+                    archiveArtifacts artifacts: "${runOutputDir}/log.html", allowEmptyArchive: true
                 }
 
                 publishHTML(target: [
-                    reportName: 'Robot Framework Test Report',
-                    reportDir: "${outputDir}",
+                    reportName: 'Robot Framework Test Report - Dryrun',
+                    reportDir: "${dryRunOutputDir}",
+                    reportFiles: 'report.html',
+                    keepAll: true
+                ])
+
+                publishHTML(target: [
+                    reportName: 'Robot Framework Test Report - Run Test Cases',
+                    reportDir: "${runOutputDir}",
                     reportFiles: 'report.html',
                     keepAll: true
                 ])
