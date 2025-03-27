@@ -1,6 +1,6 @@
 *** Settings ***
 Resource         ../Resources/Imports/imports.resource
-Test Setup       Open Computer DB Browser
+Test Setup       Open Browser Dynamic Table
 Test Teardown    Close All Browsers
 
 *** Variables ***
