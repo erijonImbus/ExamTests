@@ -133,12 +133,12 @@ pipeline {
                 }
 
                 // Publish HTML reports from Dryrun stage
-                publishHTML(target: [
-                    reportName: 'Robot Framework Test Report - Dryrun',
-                    reportDir: "${dryRunOutputDir}",
-                    reportFiles: 'report.html',
-                    keepAll: true
-                ])
+                // publishHTML(target: [
+                //     reportName: 'Robot Framework Test Report - Dryrun',
+                //     reportDir: "${dryRunOutputDir}",
+                //     reportFiles: 'report.html',
+                //     keepAll: true
+                // ])
 
                 // Publish HTML reports from Run Test Cases stage
                 publishHTML(target: [
