@@ -12,7 +12,7 @@ ${CHECKOUT_PRODUCT_NAMES_XPATH}     //tr[@class='success']//td[2]
 
 *** Keywords ***
 Open Browser And Navigate To URL
-    Open Browser    ${URLi}    ${BROWSER}
+    Open Browser With Chrome Headless    ${URLi}
     Maximize Browser Window
     Wait Until Element Is Visible    xpath=//a[contains(text(), 'Home')]
 

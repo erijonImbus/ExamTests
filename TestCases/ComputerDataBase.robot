@@ -1,6 +1,6 @@
 *** Settings ***
 Resource         ../Resources/Imports/imports.resource
-Test Setup       Open Browser Dynamic Table
+Test Setup       Open Computer DB Browser
 Test Teardown    Close All Browsers
 
 *** Variables ***
@@ -17,7 +17,7 @@ Tabular Of Scraped Computer Data
 
 *** Keywords ***
 Open Computer DB Browser
-    Open Browser    ${URL_DB}    ${BROWSER_DB}
+    Open Browser With Chrome Headless    ${URL_DB}
     Maximize Browser Window
 
 Close Computer DB Browser

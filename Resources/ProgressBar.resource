@@ -11,7 +11,7 @@ ${PROGRESS_BAR}    //div[@id='progressBar']
 
 *** Keywords ***
 Open Browser Progress Bar
-    Open Browser    ${URL}    ${BROWSER}
+    Open Browser With Chrome Headless    ${URL}
     Maximize Browser Window
 
 Close Browser Proggres Bar

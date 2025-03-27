@@ -15,7 +15,7 @@ ${NAME_VALUE}      FILAN
 
 *** Keywords ***
 Open Browser Overlapped TextBox
-    Open Browser    ${Overlapped_URL}    ${BROWSER}
+    Open Browser With Chrome Headless    ${Overlapped_URL}
     Maximize Browser Window
 
 Close Browser Overlapped TextBox

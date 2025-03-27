@@ -25,7 +25,7 @@ ${PRODUCTS_TABLE}    //div[@class='table-responsive']
 ${ADD_TO_CART}    //a[contains(text(), 'Add to cart')]
 *** Keywords ***
 Open Browser ECommerce
-    Open Browser    ${ECommerce_URL}    ${BROWSER}
+    Open Browser With Chrome Headless    ${ECommerce_URL}
     Maximize Browser Window
 
 Close Browser ECommerce
