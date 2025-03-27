@@ -83,20 +83,21 @@ pipeline {
             }
         }
 
-        stage('Archive Logs - Dryrun') {
-            steps {
-                script {
-                    echo "Archiving test logs from Dryrun..."
-                    archiveArtifacts allowEmptyArchive: true, artifacts: 'output/dryrun/**/*.log', fingerprint: true
-                }
-            }
-        }
-
         stage('Archive Logs - Run Test Cases') {
             steps {
                 script {
                     echo "Archiving test logs from Run Test Cases..."
                     archiveArtifacts allowEmptyArchive: true, artifacts: 'output/run/**/*.log', fingerprint: true
+                }
+            }
+        }
+
+        // Archiving Dryrun logs separately (for specific test run access)
+        stage('Archive Logs - Dryrun') {
+            steps {
+                script {
+                    echo "Archiving test logs from Dryrun..."
+                    archiveArtifacts allowEmptyArchive: true, artifacts: 'output/dryrun/**/*.log', fingerprint: true
                 }
             }
         }
@@ -131,6 +132,7 @@ pipeline {
                     archiveArtifacts artifacts: "${runOutputDir}/log.html", allowEmptyArchive: true
                 }
 
+                // Publish HTML reports from Dryrun stage
                 publishHTML(target: [
                     reportName: 'Robot Framework Test Report - Dryrun',
                     reportDir: "${dryRunOutputDir}",
@@ -138,6 +140,7 @@ pipeline {
                     keepAll: true
                 ])
 
+                // Publish HTML reports from Run Test Cases stage
                 publishHTML(target: [
                     reportName: 'Robot Framework Test Report - Run Test Cases',
                     reportDir: "${runOutputDir}",
