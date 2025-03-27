@@ -1,0 +1,33 @@
+# Ignore HTML and AXML reports
+*.html
+*.xml
+*.axml
+
+# Ignore Robot Framework log and output files
+output.xml
+log.html
+report.html
+
+# Ignore Robot Framework directories for logs, reports, and output
+output/
+log/
+report/
+
+# Ignore PNG files
+*.png
+
+# Ignore other common temporary files and editor-specific files
+*.swp
+*.bak
+*.tmp
+*.DS_Store
+*.idea/
+.vscode/
+
+# Ignore Python bytecode files
+*.pyc
+*.pyo
+__pycache__/
+
+# Ignore virtual environment directory
+venv/

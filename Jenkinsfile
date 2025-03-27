@@ -47,7 +47,7 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
+        stage('Run Tests - Dryrun') {
             steps {
                 script {
                     echo "Running tests with tags: ${params.TAGS}"
@@ -59,6 +59,24 @@ pipeline {
                     } else {
                         bat """
                         docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --dryrun --outputdir /app/output/dryrun /app"
+                        """
+                    }
+                }
+            }
+        }
+
+                stage('Run Test Cases') {
+            steps {
+                script {
+                    echo "Running tests with tags: ${params.TAGS}"
+
+                    if (params.TAGS) {
+                        bat """
+                        docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --outputdir /app/output/run --include ${params.TAGS} /app"
+                        """
+                    } else {
+                        bat """
+                        docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --outputdir /app/output/run /app"
                         """
                     }
                 }
