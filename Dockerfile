@@ -3,7 +3,7 @@ FROM python:3.11-slim
 # Set environment variables to avoid Python buffering and for easier troubleshooting
 ENV PYTHONUNBUFFERED=1
 ENV LANG=C.UTF-8
-ENV DEBIAN_FRONTEND=noninteractive  
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Install dependencies for Selenium, Chrome, and ChromeDriver
 RUN apt-get update && apt-get install -y \
@@ -24,9 +24,11 @@ RUN apt-get update && apt-get install -y \
     libxss1 \
     libgdk-pixbuf2.0-0 \
     libsecret-1-0 \
+    libvulkan1 \
+    xdg-utils \
     && rm -rf /var/lib/apt/lists/*
 
-# installing google-chrome-stable 
+# Install Google Chrome stable version
 RUN curl -LO https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
     apt-get install -y ./google-chrome-stable_current_amd64.deb && \
     rm google-chrome-stable_current_amd64.deb
