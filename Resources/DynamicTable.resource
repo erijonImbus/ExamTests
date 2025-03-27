@@ -9,7 +9,7 @@ ${CHROME_CPU_CELL}     //div[span[contains(text(),'Chrome')]]//span[contains(tex
 
 *** Keywords ***
 Open Browser Dynamic Table
-    Open Browser With Chrome Headless
+    Open Browser With Chrome Headless    ${DynamicTable_URL}
     Maximize Browser Window
 
 Close Browser Dynamic Table
