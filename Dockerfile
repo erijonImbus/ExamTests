@@ -26,21 +26,10 @@ RUN apt-get update && apt-get install -y \
     libsecret-1-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Google Chrome (latest stable version)
-RUN curl -sSL https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o google-chrome.deb \
-    && apt-get update && apt-get install -y ./google-chrome.deb \
-    && rm google-chrome.deb
-
-# Install ChromeDriver by automatically matching it to the installed Google Chrome version
-RUN google-chrome --version \
-    && CHROME_VERSION=$(google-chrome --version | sed 's/Google Chrome //g' | sed 's/\..*//') \
-    && echo "Installing ChromeDriver version: $CHROME_VERSION" \
-    # Attempt to get the corresponding ChromeDriver version
-    && wget https://chromedriver.storage.googleapis.com/$CHROME_VERSION/chromedriver_linux64.zip -O chromedriver.zip \
-    || (echo "Exact ChromeDriver version not found. Falling back to a compatible version (version 134)." \
-    && wget https://chromedriver.storage.googleapis.com/134.0.6998.0/chromedriver_linux64.zip -O chromedriver.zip) \
-    && unzip chromedriver.zip -d /usr/local/bin/ \
-    && rm chromedriver.zip
+# installing google-chrome-stable 
+RUN curl -LO https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+    apt-get install -y ./google-chrome-stable_current_amd64.deb && \
+    rm google-chrome-stable_current_amd64.deb
 
 # Set the working directory
 WORKDIR /app
