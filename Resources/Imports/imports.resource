@@ -23,8 +23,7 @@ Set Chrome Headless Options
     Call Method    ${chrome_options}    add_argument    --disable-gpu
     Call Method    ${chrome_options}    add_argument    --no-sandbox
     Call Method    ${chrome_options}    add_argument    --disable-dev-shm-usage
-    Call Method    ${chrome_options}    add_argument    --user-data-dir=${USER_DATA_DIR}
-    [Return]    ${chrome_options}
+    [Return]       ${chrome_options}
 
 Open Browser With Chrome Headless
     ${chrome_options}=    Set Chrome Headless Options

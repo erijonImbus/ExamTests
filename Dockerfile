@@ -45,3 +45,5 @@ COPY python_requirements.txt .
 
 # Install Python dependencies from the requirements file
 RUN pip install --no-cache-dir -r python_requirements.txt
+RUN pip install --upgrade selenium
+RUN apt-get update && apt-get install -y google-chrome-stable
