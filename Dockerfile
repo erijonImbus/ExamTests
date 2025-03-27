@@ -26,6 +26,7 @@ RUN apt-get update && apt-get install -y \
     libsecret-1-0 \
     libvulkan1 \
     xdg-utils \
+    fonts-liberation \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Google Chrome stable version
