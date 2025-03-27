@@ -22,15 +22,20 @@ Set Chrome Headless Options
     Call Method    ${chrome_options}    add_argument    --headless
     Call Method    ${chrome_options}    add_argument    --disable-gpu
     Call Method    ${chrome_options}    add_argument    --no-sandbox
+    #Call Method    ${chrome_options}    add_argument    --user-data-dir=${USER_DATA_DIR}
     Call Method    ${chrome_options}    add_argument    --disable-dev-shm-usage
-    [Return]       ${chrome_options}
+    [Return]    ${chrome_options}
 
 Open Browser With Chrome Headless
-    ${chrome_options}=    Set Chrome Headless Options
-    Open Browser    ${DynamicTable_URL}    chrome    options=${chrome_options}
-    Maximize Browser Window
-
-Open Browser Progress Bar Headless
+    [Arguments]    ${URL}
     ${chrome_options}=    Set Chrome Headless Options
     Open Browser    ${URL}    chrome    options=${chrome_options}
     Maximize Browser Window
+
+Open Browser Progress Bar Headless
+    [Arguments]    ${URL}
+    ${chrome_options}=    Set Chrome Headless Options
+    Open Browser    ${URL}    chrome    options=${chrome_options}
+    Maximize Browser Window
+
+
