@@ -37,10 +37,10 @@ RUN google-chrome --version \
     && echo "Installing ChromeDriver version: $CHROME_VERSION" \
     # Attempt to get the corresponding ChromeDriver version
     && wget https://chromedriver.storage.googleapis.com/$CHROME_VERSION/chromedriver_linux64.zip -O chromedriver.zip \
-    || (echo "Exact ChromeDriver version not found. Falling back to a compatible version (version 134)." && wget https://chromedriver.storage.googleapis.com/134.0.5735.90/chromedriver_linux64.zip -O chromedriver.zip) \
+    || (echo "Exact ChromeDriver version not found. Falling back to a compatible version (version 134)." \
+    && wget https://chromedriver.storage.googleapis.com/134.0.6998.0/chromedriver_linux64.zip -O chromedriver.zip) \
     && unzip chromedriver.zip -d /usr/local/bin/ \
     && rm chromedriver.zip
-
 
 # Set the working directory
 WORKDIR /app
