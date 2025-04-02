@@ -4,6 +4,9 @@ pipeline {
     parameters {
         string(name: 'TAGS', defaultValue: '', description: 'Comma-separated tags to filter tests (leave empty to run all tests)')
         string(name: 'BUILD_TIME', defaultValue: 'H 2 * * 1-5', description: 'Cron schedule to trigger the build periodically (default: H 2 * * 1-5)')
+        
+        // Add Browser choice parameter
+        choice(name: 'BROWSER', choices: ['headlesschrome', 'firefox', 'edge'], description: 'Choose the browser to run tests')
     }
 
     environment {
@@ -50,7 +53,7 @@ pipeline {
         stage('Run Tests - Dryrun') {
             steps {
                 script {
-                    echo "Running tests with tags: ${params.TAGS}"
+                    echo "Running tests with browser: ${params.BROWSER} and tags: ${params.TAGS}"
 
                     if (params.TAGS) {
                         bat """
@@ -68,15 +71,15 @@ pipeline {
         stage('Run Test Cases') {
             steps {
                 script {
-                    echo "Running tests with tags: ${params.TAGS}"
+                    echo "Running tests with browser: ${params.BROWSER} and tags: ${params.TAGS}"
 
                     if (params.TAGS) {
                         bat """
-                        docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --outputdir /app/output/run -v BROWSER:headlesschrome --include ${params.TAGS} /app"
+                        docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --outputdir /app/output/run -v BROWSER:${params.BROWSER} --include ${params.TAGS} /app"
                         """
                     } else {
                         bat """
-                        docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --outputdir /app/output/run -v BROWSER:headlesschrome /app"
+                        docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --outputdir /app/output/run -v BROWSER:${params.BROWSER} /app"
                         """
                     }
                 }
