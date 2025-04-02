@@ -30,13 +30,6 @@ RUN apt-get update && apt-get install -y \
     libxi6 \
     libgconf-2-4 \
     libdbus-1-3 \
-    # Install dependencies for Firefox and Microsoft Edge
-    libxtst6 \
-    libxss1 \
-    libappindicator3-1 \
-    libnss3 \
-    libgdk-pixbuf2.0-0 \
-    libasound2 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Google Chrome stable version
@@ -47,23 +40,13 @@ RUN curl -LO https://dl.google.com/linux/direct/google-chrome-stable_current_amd
 # Install Firefox
 RUN apt-get update && apt-get install -y firefox-esr
 
-# Install Microsoft Edge from Microsoft's APT repository (instead of downloading .deb directly)
-RUN wget -q https://packages.microsoft.com/keys/microsoft.asc -O /etc/apt/trusted.gpg.d/microsoft.asc \
-    && wget -q https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-dev/microsoft-edge-dev_112.0.1722.48-1_amd64.deb -O /tmp/microsoft-edge-dev_112.0.1722.48-1_amd64.deb \
+# Install Microsoft Edge from Microsoft's APT repository
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/trusted.gpg.d/microsoft.asc \
+    && echo "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main" | tee /etc/apt/sources.list.d/microsoft-edge-dev.list \
     && apt-get update \
-    && apt-get install -y \
-    libappindicator3-1 \
-    libnss3 \
-    libxss1 \
-    libxtst6 \
-    libgdk-pixbuf2.0-0 \
-    libgconf-2-4 \
-    libdbus-1-3 \
-    && dpkg -i /tmp/microsoft-edge-dev_112.0.1722.48-1_amd64.deb \
-    && apt-get install -y --fix-broken \
+    && apt-get install -y microsoft-edge-dev \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -f /tmp/microsoft-edge-dev_112.0.1722.48-1_amd64.deb  # Clean up the Edge deb package after installation
+    && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
 WORKDIR /app
