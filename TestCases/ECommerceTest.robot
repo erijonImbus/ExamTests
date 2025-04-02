@@ -5,7 +5,7 @@ Test Teardown    Close All Browsers
 
 *** Test Cases ***
 Add Multiple Products To Cart
-    [Tags]    pc001
+    [Tags]    pc001    bug
     Set Selenium Speed    0.5s
     Add Products To Cart    3          # Adjust this number based on available products
     Navigate To Checkout

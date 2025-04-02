@@ -3,6 +3,7 @@ pipeline {
 
     parameters {
         string(name: 'TAGS', defaultValue: '', description: 'Comma-separated tags to filter tests (leave empty to run all tests)')
+        string(name: 'EXCLUDE_TAGS', defaultValue: '', description: 'Comma-separated tags to exclude tests (leave empty to run all tests)')
         string(name: 'BUILD_TIME', defaultValue: 'H 2 * * 1-5', description: 'Cron schedule to trigger the build periodically (default: H 2 * * 1-5)')
         
         // Add Browser choice parameter
@@ -53,17 +54,20 @@ pipeline {
         stage('Run Tests - Dryrun') {
             steps {
                 script {
-                    echo "Running tests with browser: ${params.BROWSER} and tags: ${params.TAGS}"
+                    echo "Running tests with browser: ${params.BROWSER} and tags: ${params.TAGS} and excluding tags: ${params.EXCLUDE_TAGS}"
+
+                    def runCommand = "docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c \"robot --dryrun --outputdir /app/output/dryrun"
 
                     if (params.TAGS) {
-                        bat """
-                        docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --dryrun --outputdir /app/output/dryrun --include ${params.TAGS} /app"
-                        """
-                    } else {
-                        bat """
-                        docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --dryrun --outputdir /app/output/dryrun /app"
-                        """
+                        runCommand += " --include ${params.TAGS}"
                     }
+                    if (params.EXCLUDE_TAGS) {
+                        runCommand += " --exclude ${params.EXCLUDE_TAGS}"
+                    }
+
+                    runCommand += " /app\""
+
+                    bat runCommand
                 }
             }
         }
@@ -71,17 +75,20 @@ pipeline {
         stage('Run Test Cases') {
             steps {
                 script {
-                    echo "Running tests with browser: ${params.BROWSER} and tags: ${params.TAGS}"
+                    echo "Running tests with browser: ${params.BROWSER} and tags: ${params.TAGS} and excluding tags: ${params.EXCLUDE_TAGS}"
+
+                    def runCommand = "docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c \"robot --outputdir /app/output/run -v BROWSER:${params.BROWSER}"
 
                     if (params.TAGS) {
-                        bat """
-                        docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --outputdir /app/output/run -v BROWSER:${params.BROWSER} --include ${params.TAGS} /app"
-                        """
-                    } else {
-                        bat """
-                        docker run --rm -v %WORKSPACE%:/app ${IMAGE}:${VERSION} bash -c "robot --outputdir /app/output/run -v BROWSER:${params.BROWSER} /app"
-                        """
+                        runCommand += " --include ${params.TAGS}"
                     }
+                    if (params.EXCLUDE_TAGS) {
+                        runCommand += " --exclude ${params.EXCLUDE_TAGS}"
+                    }
+
+                    runCommand += " /app\""
+
+                    bat runCommand
                 }
             }
         }

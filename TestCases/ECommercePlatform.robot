@@ -6,6 +6,7 @@ Test Teardown    Close Browser ECommerce
 
 *** Test Cases ***
 Adds Products To Cart In ECommerce Platform
+    [Tags]    bug
     Set Selenium Speed    0.5s
     Valid ECommerce Home Page
     Select Product1
