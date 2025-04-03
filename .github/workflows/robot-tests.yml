@@ -21,7 +21,6 @@ jobs:
       TAGS: "work01"
       EXCLUDE_TAGS: "bug"
 
-
     steps:
       # Checkout the repository to get the latest code
       - name: Checkout Repository
@@ -42,18 +41,18 @@ jobs:
       # Run the tests in dryrun mode using the built Docker image
       - name: Run Tests - Dryrun
         run: |
-          echo "Running tests using image ${{ env.IMAGE }}:${{ env.VERSION }}..."
+          echo "Running tests in dryrun mode using image ${{ env.IMAGE }}:${{ env.VERSION }}..."
           docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} bash -c '
           robot --dryrun --outputdir /app/output/dryrun --include ${{ env.TAGS }} --exclude ${{ env.EXCLUDE_TAGS }} /app
           '
 
-
       # Run the actual test cases using the built Docker image
-      # - name: Run Test Cases
-      #   run: |
-      #     echo "Running tests using image ${{ env.IMAGE }}:${{ env.VERSION }}..."
-      #     docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} `
-      #     powershell -Command "robot --outputdir /app/output/run -v BROWSER:${{ env.BROWSER }} --include ${{ env.TAGS }} --exclude ${{ env.EXCLUDE_TAGS }} /app"
+      - name: Run Test Cases
+        run: |
+          echo "Running actual test cases using image ${{ env.IMAGE }}:${{ env.VERSION }}..."
+          docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} bash -c '
+          robot --outputdir /app/output/run -v BROWSER:${{ env.BROWSER }} --include ${{ env.TAGS }} --exclude ${{ env.EXCLUDE_TAGS }} /app
+          '
 
       # Archive the Dryrun test logs
       - name: Archive Test Logs - Dryrun
