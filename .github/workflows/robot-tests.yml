@@ -8,8 +8,17 @@ on:
     branches:
       - main
   schedule:
-    - cron: "*/15 * * * *"
-
+    - cron: "*/15 * * * *"  # Runs every 15 minutes
+  workflow_dispatch:
+    inputs:
+      TAGS:
+        description: 'Tags to include in the tests'
+        required: false
+        default: 'work01'
+      EXCLUDE_TAGS:
+        description: 'Tags to exclude from the tests'
+        required: false
+        default: 'bug'
 
 jobs:
   test:
@@ -19,8 +28,8 @@ jobs:
       IMAGE: robotframework-docker-test
       VERSION: 1.0
       BROWSER: headlesschrome
-      TAGS: "work01"
-      EXCLUDE_TAGS: "bug"
+      TAGS: ${{ github.event.inputs.TAGS }}
+      EXCLUDE_TAGS: ${{ github.event.inputs.EXCLUDE_TAGS }}
 
     steps:
       # Checkout the repository to get the latest code
