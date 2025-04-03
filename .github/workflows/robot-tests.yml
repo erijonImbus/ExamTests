@@ -49,12 +49,20 @@ jobs:
           docker build -t ${{ env.IMAGE }}:${{ env.VERSION }} -f .github/workflows/Dockerfile .
 
       # Run the tests in dryrun mode using the built Docker image
+# Run the tests in dryrun mode using the built Docker image
       - name: Run Tests - Dryrun
         run: |
           echo "Running tests in dryrun mode using image ${{ env.IMAGE }}:${{ env.VERSION }}..."
-          docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} bash -c "
-          robot --dryrun --outputdir /app/output/dryrun --include ${TAGS} --exclude ${EXCLUDE_TAGS} /app
-          "
+          if [[ -z "${{ env.TAGS }}" && -z "${{ env.EXCLUDE_TAGS }}" ]]; then
+            docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} bash -c "
+              robot --dryrun --outputdir /app/output/dryrun /app
+            "
+          else
+            docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} bash -c "
+              robot --dryrun --outputdir /app/output/dryrun --include ${TAGS} --exclude ${EXCLUDE_TAGS} /app
+            "
+          fi
+
 
       # Run the actual test cases using the built Docker image
       - name: Run Test Cases
