@@ -32,16 +32,16 @@ jobs:
           echo "Checking Docker installation..."
           docker version
 
-      # Check if Docker-related files changed (Dockerfile, python_requirements.txt)
       - name: Check for Docker Image Changes
         id: check_changes
         shell: powershell
         run: |
-          $changes = git diff --name-only HEAD | Select-String -Pattern 'Dockerfile|python_requirements.txt'
-          if ($changes) {
-            echo "DOCKER_CHANGED=true" | Out-File -FilePath $env:GITHUB_ENV -Append
-          } else {
-            echo "DOCKER_CHANGED=false" | Out-File -FilePath $env:GITHUB_ENV -Append
+            $changes = git diff --name-only HEAD | Select-String -Pattern 'Dockerfile|python_requirements.txt'
+            if ($changes) {
+              echo "DOCKER_CHANGED=true" | Out-File -FilePath $env:GITHUB_ENV -Append
+            } else {
+              echo "DOCKER_CHANGED=false" | Out-File -FilePath $env:GITHUB_ENV -Append
+            }
 
       # Build Docker Image if Docker-related files changed
       - name: Build Docker Image (if changes detected)
