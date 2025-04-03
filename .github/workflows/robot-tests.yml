@@ -46,7 +46,7 @@ jobs:
 
       # Build Docker Image if Docker-related files changed
       - name: Build Docker Image (if changes detected)
-        if: env.DOCKER_CHANGED == 'true'
+        if: ${{ steps.check_changes.outputs.DOCKER_CHANGED == 'true' }}
         run: |
           echo "Building Docker image..."
           docker build -t ${{ env.IMAGE }}:${{ env.VERSION }} -f .github/workflows/Dockerfile .  # Ensure Dockerfile path is correct
