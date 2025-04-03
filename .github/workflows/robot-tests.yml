@@ -42,15 +42,15 @@ jobs:
       - name: Run Tests - Dryrun
         run: |
           echo "Running tests using image ${{ env.IMAGE }}:${{ env.VERSION }}..."
-          docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} `
-          powershell -Command "robot --dryrun --outputdir /app/output/dryrun --include ${{ env.TAGS }} --exclude ${{ env.EXCLUDE_TAGS }} /app"
+          docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} \
+          robot --dryrun --outputdir /app/output/dryrun --include ${{ env.TAGS }} --exclude ${{ env.EXCLUDE_TAGS }} /app
 
       # Run the actual test cases using the built Docker image
       - name: Run Test Cases
         run: |
           echo "Running tests using image ${{ env.IMAGE }}:${{ env.VERSION }}..."
-          docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} `
-          powershell -Command "robot --outputdir /app/output/run -v BROWSER:${{ env.BROWSER }} --include ${{ env.TAGS }} --exclude ${{ env.EXCLUDE_TAGS }} /app"
+          docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} \
+          robot --outputdir /app/output/run -v BROWSER:${{ env.BROWSER }} --include ${{ env.TAGS }} --exclude ${{ env.EXCLUDE_TAGS }} /app
 
       # Archive the Dryrun test logs
       - name: Archive Test Logs - Dryrun
