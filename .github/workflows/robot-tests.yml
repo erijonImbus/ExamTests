@@ -34,12 +34,13 @@ jobs:
         id: check_changes
         shell: powershell
         run: |
-          $changes = git diff --name-only HEAD~1..HEAD | Select-String -Pattern 'Dockerfile|python_requirements.txt'
-          if ($changes) {
-            echo "DOCKER_CHANGED=true" | Out-File -FilePath $env:GITHUB_ENV -Append
-          } else {
-            echo "DOCKER_CHANGED=false" | Out-File -FilePath $env:GITHUB_ENV -Append
-          }
+            $changes = git diff --name-only HEAD | Select-String -Pattern 'Dockerfile|python_requirements.txt'
+            if ($changes) {
+              echo "DOCKER_CHANGED=true" | Out-File -FilePath $env:GITHUB_ENV -Append
+            } else {
+              echo "DOCKER_CHANGED=false" | Out-File -FilePath $env:GITHUB_ENV -Append
+            }
+        
 
       - name: Build Docker Image (if changes detected)
         if: env.DOCKER_CHANGED == 'true'
