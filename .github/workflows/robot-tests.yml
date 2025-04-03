@@ -43,7 +43,7 @@ jobs:
         run: |
           echo "Running tests using image ${{ env.IMAGE }}:${{ env.VERSION }}..."
           docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} `
-          powershell -Command "robot --dryrun --outputdir /app/output/dryrun --include ${{ env.TAGS }} /app"
+          powershell -Command "robot --dryrun --outputdir /app/output/dryrun /app"
 
       # Run the actual test cases using the built Docker image
       # - name: Run Test Cases
