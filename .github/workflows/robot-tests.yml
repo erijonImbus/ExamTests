@@ -45,12 +45,16 @@ jobs:
       - name: Build Docker Image (if changes detected)
         if: env.DOCKER_CHANGED == 'true'
         run: |
-          docker build -t ${{ env.IMAGE }}:${{ env.VERSION }} .
-
+              echo "Building Docker image..."
+              docker build -t ${{ env.IMAGE }}:${{ env.VERSION }} .
+              docker images  # List images to verify it's built
+          
       - name: Run Tests - Dryrun
         run: |
-          docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} `
-          powershell -Command "robot --dryrun --outputdir /app/output/dryrun --include ${{ env.TAGS }} --exclude ${{ env.EXCLUDE_TAGS }} /app"
+              echo "Running tests using image ${{ env.IMAGE }}:${{ env.VERSION }}..."
+              docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} `
+              powershell -Command "robot --dryrun --outputdir /app/output/dryrun --include ${{ env.TAGS }} --exclude ${{ env.EXCLUDE_TAGS }} /app"
+          
 
       - name: Run Test Cases
         run: |
