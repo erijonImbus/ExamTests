@@ -19,6 +19,15 @@ on:
         description: 'Tags to exclude from the tests'
         required: false
         default: ''
+      BROWSER:
+        description: 'Select the browser to run tests on'
+        required: true
+        type: choice
+        options:
+          - headlesschrome
+          - firefox
+          - edge
+        default: headlesschrome
 
 jobs:
   test:
@@ -27,7 +36,7 @@ jobs:
     env:
       IMAGE: robotframework-docker-test
       VERSION: 1.0
-      BROWSER: headlesschrome
+      BROWSER: ${{ github.event.inputs.BROWSER || 'headlesschrome' }}  # Default to headlesschrome if not provided
       TAGS: ${{ github.event.inputs.TAGS || '' }}
       EXCLUDE_TAGS: ${{ github.event.inputs.EXCLUDE_TAGS || '' }}
 
@@ -49,7 +58,6 @@ jobs:
           docker build -t ${{ env.IMAGE }}:${{ env.VERSION }} -f .github/workflows/Dockerfile .
 
       # Run the tests in dryrun mode using the built Docker image
-# Run the tests in dryrun mode using the built Docker image
       - name: Run Tests - Dryrun
         run: |
           echo "Running tests in dryrun mode using image ${{ env.IMAGE }}:${{ env.VERSION }}..."
@@ -63,13 +71,12 @@ jobs:
             "
           fi
 
-
       # Run the actual test cases using the built Docker image
       - name: Run Test Cases
         run: |
           echo "Running actual test cases using image ${{ env.IMAGE }}:${{ env.VERSION }}..."
           docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} bash -c "
-          robot --outputdir /app/output/run -v BROWSER:${{ env.BROWSER }} --include ${TAGS} --exclude ${EXCLUDE_TAGS} /app
+            robot --outputdir /app/output/run -v BROWSER:${{ env.BROWSER }} --include ${TAGS} --exclude ${EXCLUDE_TAGS} /app
           "
 
       # Archive the Dryrun test logs
