@@ -1,0 +1,75 @@
+name: Robot Framework Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "0 2 * * 1-5"
+
+jobs:
+  test:
+    runs-on: windows-latest
+
+    env:
+      IMAGE: robotframework-docker-test
+      VERSION: 1.0
+      BROWSER: headlesschrome
+      TAGS: ""
+      EXCLUDE_TAGS: ""
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Docker
+        run: |
+          echo "Checking Docker installation..."
+          docker version
+
+      - name: Check for Docker Image Changes
+        id: check_changes
+        shell: powershell
+        run: |
+          $changes = git diff --name-only HEAD~1..HEAD | Select-String -Pattern 'Dockerfile|python_requirements.txt'
+          if ($changes) {
+            echo "DOCKER_CHANGED=true" | Out-File -FilePath $env:GITHUB_ENV -Append
+          } else {
+            echo "DOCKER_CHANGED=false" | Out-File -FilePath $env:GITHUB_ENV -Append
+          }
+
+      - name: Build Docker Image (if changes detected)
+        if: env.DOCKER_CHANGED == 'true'
+        run: |
+          docker build -t ${{ env.IMAGE }}:${{ env.VERSION }} .
+
+      - name: Run Tests - Dryrun
+        run: |
+          docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} `
+          powershell -Command "robot --dryrun --outputdir /app/output/dryrun --include ${{ env.TAGS }} --exclude ${{ env.EXCLUDE_TAGS }} /app"
+
+      - name: Run Test Cases
+        run: |
+          docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} `
+          powershell -Command "robot --outputdir /app/output/run -v BROWSER:${{ env.BROWSER }} --include ${{ env.TAGS }} --exclude ${{ env.EXCLUDE_TAGS }} /app"
+
+      - name: Archive Test Logs - Dryrun
+        uses: actions/upload-artifact@v4
+        with:
+          name: dryrun-logs
+          path: output/dryrun/
+
+      - name: Archive Test Logs - Run
+        uses: actions/upload-artifact@v4
+        with:
+          name: run-logs
+          path: output/run/
+
+      - name: Publish HTML Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-test-reports
+          path: output/run/report.html
