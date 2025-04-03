@@ -14,11 +14,11 @@ on:
       TAGS:
         description: 'Tags to include in the tests'
         required: false
-        default: 'work01'
+        default: ''
       EXCLUDE_TAGS:
         description: 'Tags to exclude from the tests'
         required: false
-        default: 'bug'
+        default: ''
 
 jobs:
   test:
@@ -28,8 +28,8 @@ jobs:
       IMAGE: robotframework-docker-test
       VERSION: 1.0
       BROWSER: headlesschrome
-      TAGS: ${{ github.event.inputs.TAGS }}
-      EXCLUDE_TAGS: ${{ github.event.inputs.EXCLUDE_TAGS }}
+      TAGS: ${{ github.event.inputs.TAGS || '' }}
+      EXCLUDE_TAGS: ${{ github.event.inputs.EXCLUDE_TAGS || '' }}
 
     steps:
       # Checkout the repository to get the latest code
@@ -52,17 +52,17 @@ jobs:
       - name: Run Tests - Dryrun
         run: |
           echo "Running tests in dryrun mode using image ${{ env.IMAGE }}:${{ env.VERSION }}..."
-          docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} bash -c '
-          robot --dryrun --outputdir /app/output/dryrun --include ${{ env.TAGS }} --exclude ${{ env.EXCLUDE_TAGS }} /app
-          '
+          docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} bash -c "
+          robot --dryrun --outputdir /app/output/dryrun --include ${TAGS} --exclude ${EXCLUDE_TAGS} /app
+          "
 
       # Run the actual test cases using the built Docker image
       - name: Run Test Cases
         run: |
           echo "Running actual test cases using image ${{ env.IMAGE }}:${{ env.VERSION }}..."
-          docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} bash -c '
-          robot --outputdir /app/output/run -v BROWSER:${{ env.BROWSER }} --include ${{ env.TAGS }} --exclude ${{ env.EXCLUDE_TAGS }} /app
-          '
+          docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} bash -c "
+          robot --outputdir /app/output/run -v BROWSER:${{ env.BROWSER }} --include ${TAGS} --exclude ${EXCLUDE_TAGS} /app
+          "
 
       # Archive the Dryrun test logs
       - name: Archive Test Logs - Dryrun
