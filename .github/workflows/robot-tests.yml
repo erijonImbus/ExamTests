@@ -8,7 +8,8 @@ on:
     branches:
       - main
   schedule:
-    - cron: "0 2 * * 1-5"
+    - cron: "*/15 * * * *"
+
 
 jobs:
   test:
