@@ -32,6 +32,7 @@ jobs:
           echo "Checking Docker installation..."
           docker version
 
+      # Check for Docker Image Changes
       - name: Check for Docker Image Changes
         id: check_changes
         shell: powershell
