@@ -22,57 +22,64 @@ jobs:
       EXCLUDE_TAGS: ""
 
     steps:
+      # Checkout the repository to get the latest code
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      # Set up Docker
       - name: Set Up Docker
         run: |
           echo "Checking Docker installation..."
           docker version
 
+      # Check if Docker-related files changed (Dockerfile, python_requirements.txt)
       - name: Check for Docker Image Changes
         id: check_changes
         shell: powershell
         run: |
-            $changes = git diff --name-only HEAD | Select-String -Pattern 'Dockerfile|python_requirements.txt'
-            if ($changes) {
-              echo "DOCKER_CHANGED=true" | Out-File -FilePath $env:GITHUB_ENV -Append
-            } else {
-              echo "DOCKER_CHANGED=false" | Out-File -FilePath $env:GITHUB_ENV -Append
-            }
-        
+          $changes = git diff --name-only HEAD | Select-String -Pattern 'Dockerfile|python_requirements.txt'
+          if ($changes) {
+            echo "DOCKER_CHANGED=true" | Out-File -FilePath $env:GITHUB_ENV -Append
+          } else {
+            echo "DOCKER_CHANGED=false" | Out-File -FilePath $env:GITHUB_ENV -Append
 
+      # Build Docker Image if Docker-related files changed
       - name: Build Docker Image (if changes detected)
         if: env.DOCKER_CHANGED == 'true'
         run: |
-              echo "Building Docker image..."
-              docker build -t ${{ env.IMAGE }}:${{ env.VERSION }} .
-              docker images  # List images to verify it's built
-          
+          echo "Building Docker image..."
+          docker build -t ${{ env.IMAGE }}:${{ env.VERSION }} -f Dockerfile .
+          docker images  # List images to verify it's built
+
+      # Run the tests in dryrun mode using the built Docker image
       - name: Run Tests - Dryrun
         run: |
-              echo "Running tests using image ${{ env.IMAGE }}:${{ env.VERSION }}..."
-              docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} `
-              powershell -Command "robot --dryrun --outputdir /app/output/dryrun --include ${{ env.TAGS }} --exclude ${{ env.EXCLUDE_TAGS }} /app"
-          
+          echo "Running tests using image ${{ env.IMAGE }}:${{ env.VERSION }}..."
+          docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} `
+          powershell -Command "robot --dryrun --outputdir /app/output/dryrun --include ${{ env.TAGS }} --exclude ${{ env.EXCLUDE_TAGS }} /app"
 
+      # Run the actual test cases using the built Docker image
       - name: Run Test Cases
         run: |
+          echo "Running tests using image ${{ env.IMAGE }}:${{ env.VERSION }}..."
           docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} `
           powershell -Command "robot --outputdir /app/output/run -v BROWSER:${{ env.BROWSER }} --include ${{ env.TAGS }} --exclude ${{ env.EXCLUDE_TAGS }} /app"
 
+      # Archive the Dryrun test logs
       - name: Archive Test Logs - Dryrun
         uses: actions/upload-artifact@v4
         with:
           name: dryrun-logs
           path: output/dryrun/
 
+      # Archive the Run test logs
       - name: Archive Test Logs - Run
         uses: actions/upload-artifact@v4
         with:
           name: run-logs
           path: output/run/
 
+      # Publish the HTML reports from the Run test logs
       - name: Publish HTML Reports
         uses: actions/upload-artifact@v4
         with:
