@@ -32,24 +32,11 @@ jobs:
           echo "Checking Docker installation..."
           docker version
 
-      # Check for Docker Image Changes
-      - name: Check for Docker Image Changes
-        id: check_changes
-        shell: powershell
+      # Build Docker Image from Dockerfile
+      - name: Build Docker Image
         run: |
-            $changes = git diff --name-only HEAD | Select-String -Pattern 'Dockerfile|python_requirements.txt'
-            if ($changes) {
-              echo "DOCKER_CHANGED=true" | Out-File -FilePath $env:GITHUB_ENV -Append
-            } else {
-              echo "DOCKER_CHANGED=false" | Out-File -FilePath $env:GITHUB_ENV -Append
-            }
-
-      # Build Docker Image if Docker-related files changed
-      - name: Build Docker Image (if changes detected)
-        if: ${{ steps.check_changes.outputs.DOCKER_CHANGED == 'true' }}
-        run: |
-          echo "Building Docker image..."
-          docker build -t ${{ env.IMAGE }}:${{ env.VERSION }} -f .github/workflows/Dockerfile .  
+          echo "Building Docker image from Dockerfile..."
+          docker build -t ${{ env.IMAGE }}:${{ env.VERSION }} -f .github/workflows/Dockerfile .
 
       # Run the tests in dryrun mode using the built Docker image
       - name: Run Tests - Dryrun
