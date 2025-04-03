@@ -18,8 +18,9 @@ jobs:
       IMAGE: robotframework-docker-test
       VERSION: 1.0
       BROWSER: headlesschrome
-      TAGS: ""
-      EXCLUDE_TAGS: ""
+      TAGS: "work01"
+      EXCLUDE_TAGS: "bug"
+
 
     steps:
       # Checkout the repository to get the latest code
@@ -42,10 +43,10 @@ jobs:
       - name: Run Tests - Dryrun
         run: |
           echo "Running tests using image ${{ env.IMAGE }}:${{ env.VERSION }}..."
-          docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }}
           docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} bash -c '
-          robot --dryrun --outputdir /app/output/dryrun /app
-            '
+          robot --dryrun --outputdir /app/output/dryrun --include ${{ env.TAGS }} --exclude ${{ env.EXCLUDE_TAGS }} /app
+          '
+
 
       # Run the actual test cases using the built Docker image
       # - name: Run Test Cases
