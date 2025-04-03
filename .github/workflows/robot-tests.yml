@@ -49,7 +49,7 @@ jobs:
         if: env.DOCKER_CHANGED == 'true'
         run: |
           echo "Building Docker image..."
-          docker build -t ${{ env.IMAGE }}:${{ env.VERSION }} -f Dockerfile .
+          docker build -t ${{ env.IMAGE }}:${{ env.VERSION }} -f .github/workflows/Dockerfile .  # Ensure Dockerfile path is correct
           docker images  # List images to verify it's built
 
       # Run the tests in dryrun mode using the built Docker image
