@@ -109,3 +109,13 @@ jobs:
         with:
           name: robot-test-reports
           path: output/run/report.html
+
+      - name: Deploy Robot Report to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GH_PAGES_TOKEN }}
+          publish_dir: ./output/run
+          publish_branch: gh-pages
+          force_orphan: true
+          commit_message: "Deploy Robot Framework report [skip ci]"
