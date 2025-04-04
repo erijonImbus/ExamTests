@@ -37,9 +37,10 @@ jobs:
     env:
       IMAGE: robotframework-docker-test
       VERSION: 1.0
-      BROWSER: ${{ github.event.inputs.BROWSER || 'headlesschrome' }}  # Default to headlesschrome if not provided
-      TAGS: ${{ github.event.inputs.TAGS || '' }}
-      EXCLUDE_TAGS: ${{ github.event.inputs.EXCLUDE_TAGS || '' }}
+      BROWSER: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.BROWSER || 'headlesschrome' }}
+      TAGS: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.TAGS || '' }}
+      EXCLUDE_TAGS: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.EXCLUDE_TAGS || '' }}
+
 
     steps:
       # Checkout the repository to get the latest code
