@@ -9,7 +9,6 @@ on:
       - main
   schedule:
     - cron: "0 */3 * * 1-5"  # Runs every 3 hours, Monday through Friday
-
   workflow_dispatch:
     inputs:
       TAGS:
@@ -41,61 +40,70 @@ jobs:
       TAGS: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.TAGS || '' }}
       EXCLUDE_TAGS: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.EXCLUDE_TAGS || '' }}
 
-
     steps:
-      # Checkout the repository to get the latest code
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Set up Docker
       - name: Set Up Docker
         run: |
           echo "Checking Docker installation..."
           docker version
 
-      # Build Docker Image from Dockerfile
       - name: Build Docker Image
         run: |
           echo "Building Docker image from Dockerfile..."
           docker build -t ${{ env.IMAGE }}:${{ env.VERSION }} -f .github/workflows/Dockerfile .
 
-      # Run the tests in dryrun mode using the built Docker image
       - name: Run Tests - Dryrun
         run: |
           echo "Running tests in dryrun mode using image ${{ env.IMAGE }}:${{ env.VERSION }}..."
-          if [[ -z "${{ env.TAGS }}" && -z "${{ env.EXCLUDE_TAGS }}" ]]; then
-            docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} bash -c "
-              robot --dryrun --outputdir /app/output/dryrun /app
-            "
-          else
-            docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} bash -c "
-              robot --dryrun --outputdir /app/output/dryrun --include ${TAGS} --exclude ${EXCLUDE_TAGS} /app
-            "
+
+          CMD="robot --dryrun --outputdir /app/output/dryrun"
+
+          if [[ -n "${{ env.TAGS }}" ]]; then
+            CMD="$CMD --include ${{ env.TAGS }}"
           fi
 
-      # Run the actual test cases using the built Docker image
+          if [[ -n "${{ env.EXCLUDE_TAGS }}" ]]; then
+            CMD="$CMD --exclude ${{ env.EXCLUDE_TAGS }}"
+          fi
+
+          CMD="$CMD /app"
+          echo "Executing dryrun command: $CMD"
+
+          docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} bash -c "$CMD"
+
       - name: Run Test Cases
         run: |
           echo "Running actual test cases using image ${{ env.IMAGE }}:${{ env.VERSION }}..."
-          docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} bash -c "
-            robot --outputdir /app/output/run -v BROWSER:${{ env.BROWSER }} --include ${TAGS} --exclude ${EXCLUDE_TAGS} /app
-          "
 
-      # Archive the Dryrun test logs
+          CMD="robot --outputdir /app/output/run -v BROWSER:${{ env.BROWSER }}"
+
+          if [[ -n "${{ env.TAGS }}" ]]; then
+            CMD="$CMD --include ${{ env.TAGS }}"
+          fi
+
+          if [[ -n "${{ env.EXCLUDE_TAGS }}" ]]; then
+            CMD="$CMD --exclude ${{ env.EXCLUDE_TAGS }}"
+          fi
+
+          CMD="$CMD /app"
+          echo "Executing test command: $CMD"
+
+          docker run --rm -v ${PWD}:/app ${{ env.IMAGE }}:${{ env.VERSION }} bash -c "$CMD"
+
       - name: Archive Test Logs - Dryrun
         uses: actions/upload-artifact@v4
         with:
           name: dryrun-logs
           path: output/dryrun/
 
-      # Archive the Run test logs
       - name: Archive Test Logs - Run
         uses: actions/upload-artifact@v4
         with:
           name: run-logs
           path: output/run/
 
-      # Publish the HTML reports from the Run test logs
       - name: Publish HTML Reports
         uses: actions/upload-artifact@v4
         with:
