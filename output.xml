@@ -1,0 +1,1693 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.2.2 (Python 3.11.11 on linux)" generated="2025-04-04T21:29:55.977119" rpa="false" schemaversion="5">
+<suite id="s1" name="App" source="/app">
+<suite id="s1-s1" name="TestCases" source="/app/TestCases">
+<suite id="s1-s1-s1" name="ComputerDataBase" source="/app/TestCases/ComputerDataBase.robot">
+<test id="s1-s1-s1-t1" name="Tabular Of Scraped Computer Data" line="11">
+<kw name="Open Computer DB Browser" type="SETUP">
+<kw name="Open Browser With Chrome Headless" owner="imports">
+<kw name="Set Chrome Headless Options" owner="imports">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-04-04T21:29:56.147211" level="INFO">${chrome_options} = &lt;selenium.webdriver.chrome.options.Options object at 0x7f64f513f0d0&gt;</msg>
+<var>${chrome_options}</var>
+<arg>sys.modules['selenium.webdriver'].ChromeOptions()</arg>
+<arg>sys, selenium.webdriver</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-04-04T21:29:56.146938" elapsed="0.000307"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--headless</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:29:56.147371" elapsed="0.000136"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--disable-gpu</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:29:56.147638" elapsed="0.000118"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--no-sandbox</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:29:56.147858" elapsed="0.000109"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--disable-dev-shm-usage</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:29:56.148075" elapsed="0.000123"/>
+</kw>
+<return>
+<value>${chrome_options}</value>
+<status status="PASS" start="2025-04-04T21:29:56.148254" elapsed="0.000049"/>
+</return>
+<msg time="2025-04-04T21:29:56.148418" level="INFO">${chrome_options} = &lt;selenium.webdriver.chrome.options.Options object at 0x7f64f513f0d0&gt;</msg>
+<var>${chrome_options}</var>
+<status status="PASS" start="2025-04-04T21:29:56.146254" elapsed="0.002190"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:56.148786" level="INFO">Opening browser 'chrome' to base url 'https://computer-database.gatling.io/computers'.</msg>
+<arg>${URL}</arg>
+<arg>chrome</arg>
+<arg>options=${chrome_options}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2025-04-04T21:29:56.148564" elapsed="0.921764"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.070671" elapsed="0.018908"/>
+</kw>
+<arg>${URL_DB}</arg>
+<status status="PASS" start="2025-04-04T21:29:56.145960" elapsed="0.943808"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.090003" elapsed="0.002022"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:29:56.145610" elapsed="0.946487"/>
+</kw>
+<kw name="Get Computer Data">
+<kw name="Get Element Count" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.103678" level="INFO">${Rows} = 10</msg>
+<var>${Rows}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr</arg>
+<doc>Returns the number of elements matching ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.092577" elapsed="0.011145"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.104107" level="INFO">${Computers} = {}</msg>
+<var>${Computers}</var>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.103894" elapsed="0.000239"/>
+</kw>
+<for flavor="IN RANGE">
+<iter>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.122111" level="INFO">${Computer_Name} = ACE</msg>
+<var>${Computer_Name}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[1]/a</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.104531" elapsed="0.017616"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.135042" level="INFO">${Introduced} = -</msg>
+<var>${Introduced}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[2]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.122287" elapsed="0.012789"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.147948" level="INFO">${Discontinued} = -</msg>
+<var>${Discontinued}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[3]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.135213" elapsed="0.012769"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.160830" level="INFO">${Company} = -</msg>
+<var>${Company}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[4]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.148112" elapsed="0.012749"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.161340" level="INFO">&amp;{Details} = { introduced=- | discontinued=- | company=- }</msg>
+<var>&amp;{Details}</var>
+<arg>introduced=${Introduced}</arg>
+<arg>discontinued=${Discontinued}</arg>
+<arg>company=${Company}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.160996" elapsed="0.000371"/>
+</kw>
+<kw name="Set To Dictionary" owner="Collections">
+<arg>${Computers}</arg>
+<arg>${Computer_Name}</arg>
+<arg>${Details}</arg>
+<doc>Adds the given ``key_value_pairs`` and/or ``items`` to the ``dictionary``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.161488" elapsed="0.000190"/>
+</kw>
+<var name="${i}">1</var>
+<status status="PASS" start="2025-04-04T21:29:57.104425" elapsed="0.057299"/>
+</iter>
+<iter>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.174460" level="INFO">${Computer_Name} = AN/FSQ-32</msg>
+<var>${Computer_Name}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[1]/a</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.161941" elapsed="0.012554"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.187497" level="INFO">${Introduced} = 01 Jan 1960</msg>
+<var>${Introduced}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[2]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.174654" elapsed="0.012880"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.200204" level="INFO">${Discontinued} = -</msg>
+<var>${Discontinued}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[3]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.187711" elapsed="0.012532"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.213038" level="INFO">${Company} = IBM</msg>
+<var>${Company}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[4]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.200401" elapsed="0.012674"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.213628" level="INFO">&amp;{Details} = { introduced=01 Jan 1960 | discontinued=- | company=IBM }</msg>
+<var>&amp;{Details}</var>
+<arg>introduced=${Introduced}</arg>
+<arg>discontinued=${Discontinued}</arg>
+<arg>company=${Company}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.213304" elapsed="0.000352"/>
+</kw>
+<kw name="Set To Dictionary" owner="Collections">
+<arg>${Computers}</arg>
+<arg>${Computer_Name}</arg>
+<arg>${Details}</arg>
+<doc>Adds the given ``key_value_pairs`` and/or ``items`` to the ``dictionary``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.213762" elapsed="0.000147"/>
+</kw>
+<var name="${i}">2</var>
+<status status="PASS" start="2025-04-04T21:29:57.161848" elapsed="0.052103"/>
+</iter>
+<iter>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.226731" level="INFO">${Computer_Name} = AN/FSQ-7</msg>
+<var>${Computer_Name}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[1]/a</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.214180" elapsed="0.012587"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.239446" level="INFO">${Introduced} = 01 Jan 1958</msg>
+<var>${Introduced}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[2]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.226891" elapsed="0.012587"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.252983" level="INFO">${Discontinued} = -</msg>
+<var>${Discontinued}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[3]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.239629" elapsed="0.013396"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.265930" level="INFO">${Company} = IBM</msg>
+<var>${Company}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[4]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.253193" elapsed="0.012771"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.266490" level="INFO">&amp;{Details} = { introduced=01 Jan 1958 | discontinued=- | company=IBM }</msg>
+<var>&amp;{Details}</var>
+<arg>introduced=${Introduced}</arg>
+<arg>discontinued=${Discontinued}</arg>
+<arg>company=${Company}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.266118" elapsed="0.000401"/>
+</kw>
+<kw name="Set To Dictionary" owner="Collections">
+<arg>${Computers}</arg>
+<arg>${Computer_Name}</arg>
+<arg>${Details}</arg>
+<doc>Adds the given ``key_value_pairs`` and/or ``items`` to the ``dictionary``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.266660" elapsed="0.000151"/>
+</kw>
+<var name="${i}">3</var>
+<status status="PASS" start="2025-04-04T21:29:57.214077" elapsed="0.052777"/>
+</iter>
+<iter>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.279698" level="INFO">${Computer_Name} = APEXC</msg>
+<var>${Computer_Name}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[1]/a</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.267070" elapsed="0.012659"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.292243" level="INFO">${Introduced} = -</msg>
+<var>${Introduced}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[2]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.279854" elapsed="0.012418"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.305377" level="INFO">${Discontinued} = -</msg>
+<var>${Discontinued}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[3]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.292388" elapsed="0.013018"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.318065" level="INFO">${Company} = -</msg>
+<var>${Company}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[4]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.305521" elapsed="0.012573"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.318505" level="INFO">&amp;{Details} = { introduced=- | discontinued=- | company=- }</msg>
+<var>&amp;{Details}</var>
+<arg>introduced=${Introduced}</arg>
+<arg>discontinued=${Discontinued}</arg>
+<arg>company=${Company}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.318224" elapsed="0.000306"/>
+</kw>
+<kw name="Set To Dictionary" owner="Collections">
+<arg>${Computers}</arg>
+<arg>${Computer_Name}</arg>
+<arg>${Details}</arg>
+<doc>Adds the given ``key_value_pairs`` and/or ``items`` to the ``dictionary``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.318676" elapsed="0.000154"/>
+</kw>
+<var name="${i}">4</var>
+<status status="PASS" start="2025-04-04T21:29:57.266978" elapsed="0.051893"/>
+</iter>
+<iter>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.331924" level="INFO">${Computer_Name} = ARRA</msg>
+<var>${Computer_Name}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[1]/a</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.319086" elapsed="0.012867"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.344697" level="INFO">${Introduced} = -</msg>
+<var>${Introduced}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[2]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.332068" elapsed="0.012668"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.358041" level="INFO">${Discontinued} = -</msg>
+<var>${Discontinued}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[3]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.344896" elapsed="0.013181"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.370983" level="INFO">${Company} = -</msg>
+<var>${Company}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[4]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.358230" elapsed="0.012785"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.371430" level="INFO">&amp;{Details} = { introduced=- | discontinued=- | company=- }</msg>
+<var>&amp;{Details}</var>
+<arg>introduced=${Introduced}</arg>
+<arg>discontinued=${Discontinued}</arg>
+<arg>company=${Company}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.371148" elapsed="0.000308"/>
+</kw>
+<kw name="Set To Dictionary" owner="Collections">
+<arg>${Computers}</arg>
+<arg>${Computer_Name}</arg>
+<arg>${Details}</arg>
+<doc>Adds the given ``key_value_pairs`` and/or ``items`` to the ``dictionary``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.371560" elapsed="0.000189"/>
+</kw>
+<var name="${i}">5</var>
+<status status="PASS" start="2025-04-04T21:29:57.318987" elapsed="0.052806"/>
+</iter>
+<iter>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.384429" level="INFO">${Computer_Name} = ASCI Blue Mountain</msg>
+<var>${Computer_Name}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[1]/a</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.372010" elapsed="0.012496"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.396948" level="INFO">${Introduced} = -</msg>
+<var>${Introduced}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[2]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.384645" elapsed="0.012332"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.409249" level="INFO">${Discontinued} = -</msg>
+<var>${Discontinued}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[3]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.397088" elapsed="0.012189"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.421931" level="INFO">${Company} = -</msg>
+<var>${Company}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[4]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.409387" elapsed="0.012574"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.422360" level="INFO">&amp;{Details} = { introduced=- | discontinued=- | company=- }</msg>
+<var>&amp;{Details}</var>
+<arg>introduced=${Introduced}</arg>
+<arg>discontinued=${Discontinued}</arg>
+<arg>company=${Company}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.422088" elapsed="0.000298"/>
+</kw>
+<kw name="Set To Dictionary" owner="Collections">
+<arg>${Computers}</arg>
+<arg>${Computer_Name}</arg>
+<arg>${Details}</arg>
+<doc>Adds the given ``key_value_pairs`` and/or ``items`` to the ``dictionary``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.422488" elapsed="0.000170"/>
+</kw>
+<var name="${i}">6</var>
+<status status="PASS" start="2025-04-04T21:29:57.371913" elapsed="0.050787"/>
+</iter>
+<iter>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.435091" level="INFO">${Computer_Name} = ASCI Blue Pacific</msg>
+<var>${Computer_Name}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[1]/a</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.422896" elapsed="0.012224"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.447630" level="INFO">${Introduced} = 01 Jan 1998</msg>
+<var>${Introduced}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[2]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.435230" elapsed="0.012434"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.460212" level="INFO">${Discontinued} = -</msg>
+<var>${Discontinued}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[3]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.447784" elapsed="0.012457"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.473243" level="INFO">${Company} = IBM</msg>
+<var>${Company}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[4]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.460354" elapsed="0.012919"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.473704" level="INFO">&amp;{Details} = { introduced=01 Jan 1998 | discontinued=- | company=IBM }</msg>
+<var>&amp;{Details}</var>
+<arg>introduced=${Introduced}</arg>
+<arg>discontinued=${Discontinued}</arg>
+<arg>company=${Company}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.473399" elapsed="0.000331"/>
+</kw>
+<kw name="Set To Dictionary" owner="Collections">
+<arg>${Computers}</arg>
+<arg>${Computer_Name}</arg>
+<arg>${Details}</arg>
+<doc>Adds the given ``key_value_pairs`` and/or ``items`` to the ``dictionary``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.473836" elapsed="0.000141"/>
+</kw>
+<var name="${i}">7</var>
+<status status="PASS" start="2025-04-04T21:29:57.422808" elapsed="0.051209"/>
+</iter>
+<iter>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.486670" level="INFO">${Computer_Name} = ASCI Purple</msg>
+<var>${Computer_Name}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[1]/a</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.474221" elapsed="0.012479"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.499205" level="INFO">${Introduced} = 01 Jan 2005</msg>
+<var>${Introduced}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[2]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.486813" elapsed="0.012422"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.511881" level="INFO">${Discontinued} = -</msg>
+<var>${Discontinued}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[3]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.499345" elapsed="0.012565"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.524456" level="INFO">${Company} = IBM</msg>
+<var>${Company}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[4]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.512020" elapsed="0.012465"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.524895" level="INFO">&amp;{Details} = { introduced=01 Jan 2005 | discontinued=- | company=IBM }</msg>
+<var>&amp;{Details}</var>
+<arg>introduced=${Introduced}</arg>
+<arg>discontinued=${Discontinued}</arg>
+<arg>company=${Company}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.524624" elapsed="0.000297"/>
+</kw>
+<kw name="Set To Dictionary" owner="Collections">
+<arg>${Computers}</arg>
+<arg>${Computer_Name}</arg>
+<arg>${Details}</arg>
+<doc>Adds the given ``key_value_pairs`` and/or ``items`` to the ``dictionary``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.525025" elapsed="0.000138"/>
+</kw>
+<var name="${i}">8</var>
+<status status="PASS" start="2025-04-04T21:29:57.474131" elapsed="0.051072"/>
+</iter>
+<iter>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.537638" level="INFO">${Computer_Name} = ASCI Red</msg>
+<var>${Computer_Name}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[1]/a</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.525393" elapsed="0.012277"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.550259" level="INFO">${Introduced} = -</msg>
+<var>${Introduced}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[2]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.537780" elapsed="0.012509"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.563812" level="INFO">${Discontinued} = -</msg>
+<var>${Discontinued}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[3]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.550407" elapsed="0.013437"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.576558" level="INFO">${Company} = -</msg>
+<var>${Company}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[4]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.564031" elapsed="0.012558"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.577038" level="INFO">&amp;{Details} = { introduced=- | discontinued=- | company=- }</msg>
+<var>&amp;{Details}</var>
+<arg>introduced=${Introduced}</arg>
+<arg>discontinued=${Discontinued}</arg>
+<arg>company=${Company}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.576759" elapsed="0.000304"/>
+</kw>
+<kw name="Set To Dictionary" owner="Collections">
+<arg>${Computers}</arg>
+<arg>${Computer_Name}</arg>
+<arg>${Details}</arg>
+<doc>Adds the given ``key_value_pairs`` and/or ``items`` to the ``dictionary``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.577168" elapsed="0.000149"/>
+</kw>
+<var name="${i}">9</var>
+<status status="PASS" start="2025-04-04T21:29:57.525309" elapsed="0.052049"/>
+</iter>
+<iter>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.589814" level="INFO">${Computer_Name} = ASCI Thors Hammer</msg>
+<var>${Computer_Name}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[1]/a</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.577558" elapsed="0.012285"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.602014" level="INFO">${Introduced} = -</msg>
+<var>${Introduced}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[2]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.589952" elapsed="0.012092"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.614336" level="INFO">${Discontinued} = -</msg>
+<var>${Discontinued}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[3]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.602156" elapsed="0.012208"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.626794" level="INFO">${Company} = -</msg>
+<var>${Company}</var>
+<arg>//table[@class='computers zebra-striped']/tbody/tr[${i}]/td[4]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.614475" elapsed="0.012348"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.627212" level="INFO">&amp;{Details} = { introduced=- | discontinued=- | company=- }</msg>
+<var>&amp;{Details}</var>
+<arg>introduced=${Introduced}</arg>
+<arg>discontinued=${Discontinued}</arg>
+<arg>company=${Company}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.626948" elapsed="0.000289"/>
+</kw>
+<kw name="Set To Dictionary" owner="Collections">
+<arg>${Computers}</arg>
+<arg>${Computer_Name}</arg>
+<arg>${Details}</arg>
+<doc>Adds the given ``key_value_pairs`` and/or ``items`` to the ``dictionary``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.627339" elapsed="0.000138"/>
+</kw>
+<var name="${i}">10</var>
+<status status="PASS" start="2025-04-04T21:29:57.577469" elapsed="0.050046"/>
+</iter>
+<var>${i}</var>
+<value>1</value>
+<value>${Rows}+1</value>
+<status status="PASS" start="2025-04-04T21:29:57.104200" elapsed="0.523357"/>
+</for>
+<return>
+<value>${Computers}</value>
+<status status="PASS" start="2025-04-04T21:29:57.627655" elapsed="0.000050"/>
+</return>
+<msg time="2025-04-04T21:29:57.627855" level="INFO">${Computers} = {'ACE': {'introduced': '-', 'discontinued': '-', 'company': '-'}, 'AN/FSQ-32': {'introduced': '01 Jan 1960', 'discontinued': '-', 'company': 'IBM'}, 'AN/FSQ-7': {'introduced': '01 Jan 1958', 'disconti...</msg>
+<var>${Computers}</var>
+<doc>Extract computer data from the table and return it as a dictionary.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.092332" elapsed="0.535548"/>
+</kw>
+<kw name="Log Computer Data">
+<for flavor="IN">
+<iter>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.628674" level="INFO">ACE: {'introduced': '-', 'discontinued': '-', 'company': '-'}</msg>
+<arg>${cn}: ${Dt}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.628516" elapsed="0.000203"/>
+</kw>
+<var name="${Cn}">ACE</var>
+<var name="${Dt}">{'introduced': '-', 'discontinued': '-', 'company': '-'}</var>
+<status status="PASS" start="2025-04-04T21:29:57.628426" elapsed="0.000330"/>
+</iter>
+<iter>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.629049" level="INFO">AN/FSQ-32: {'introduced': '01 Jan 1960', 'discontinued': '-', 'company': 'IBM'}</msg>
+<arg>${cn}: ${Dt}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.628931" elapsed="0.000154"/>
+</kw>
+<var name="${Cn}">AN/FSQ-32</var>
+<var name="${Dt}">{'introduced': '01 Jan 1960', 'discontinued': '-', 'company': 'IBM'}</var>
+<status status="PASS" start="2025-04-04T21:29:57.628849" elapsed="0.000270"/>
+</iter>
+<iter>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.629398" level="INFO">AN/FSQ-7: {'introduced': '01 Jan 1958', 'discontinued': '-', 'company': 'IBM'}</msg>
+<arg>${cn}: ${Dt}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.629282" elapsed="0.000151"/>
+</kw>
+<var name="${Cn}">AN/FSQ-7</var>
+<var name="${Dt}">{'introduced': '01 Jan 1958', 'discontinued': '-', 'company': 'IBM'}</var>
+<status status="PASS" start="2025-04-04T21:29:57.629201" elapsed="0.000265"/>
+</iter>
+<iter>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.629766" level="INFO">APEXC: {'introduced': '-', 'discontinued': '-', 'company': '-'}</msg>
+<arg>${cn}: ${Dt}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.629648" elapsed="0.000155"/>
+</kw>
+<var name="${Cn}">APEXC</var>
+<var name="${Dt}">{'introduced': '-', 'discontinued': '-', 'company': '-'}</var>
+<status status="PASS" start="2025-04-04T21:29:57.629546" elapsed="0.000290"/>
+</iter>
+<iter>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.630105" level="INFO">ARRA: {'introduced': '-', 'discontinued': '-', 'company': '-'}</msg>
+<arg>${cn}: ${Dt}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.629992" elapsed="0.000147"/>
+</kw>
+<var name="${Cn}">ARRA</var>
+<var name="${Dt}">{'introduced': '-', 'discontinued': '-', 'company': '-'}</var>
+<status status="PASS" start="2025-04-04T21:29:57.629917" elapsed="0.000253"/>
+</iter>
+<iter>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.630439" level="INFO">ASCI Blue Mountain: {'introduced': '-', 'discontinued': '-', 'company': '-'}</msg>
+<arg>${cn}: ${Dt}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.630324" elapsed="0.000149"/>
+</kw>
+<var name="${Cn}">ASCI Blue Mountain</var>
+<var name="${Dt}">{'introduced': '-', 'discontinued': '-', 'company': '-'}</var>
+<status status="PASS" start="2025-04-04T21:29:57.630249" elapsed="0.000257"/>
+</iter>
+<iter>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.630807" level="INFO">ASCI Blue Pacific: {'introduced': '01 Jan 1998', 'discontinued': '-', 'company': 'IBM'}</msg>
+<arg>${cn}: ${Dt}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.630692" elapsed="0.000149"/>
+</kw>
+<var name="${Cn}">ASCI Blue Pacific</var>
+<var name="${Dt}">{'introduced': '01 Jan 1998', 'discontinued': '-', 'company': 'IBM'}</var>
+<status status="PASS" start="2025-04-04T21:29:57.630585" elapsed="0.000288"/>
+</iter>
+<iter>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.631318" level="INFO">ASCI Purple: {'introduced': '01 Jan 2005', 'discontinued': '-', 'company': 'IBM'}</msg>
+<arg>${cn}: ${Dt}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.631076" elapsed="0.000278"/>
+</kw>
+<var name="${Cn}">ASCI Purple</var>
+<var name="${Dt}">{'introduced': '01 Jan 2005', 'discontinued': '-', 'company': 'IBM'}</var>
+<status status="PASS" start="2025-04-04T21:29:57.630998" elapsed="0.000389"/>
+</iter>
+<iter>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.631705" level="INFO">ASCI Red: {'introduced': '-', 'discontinued': '-', 'company': '-'}</msg>
+<arg>${cn}: ${Dt}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.631555" elapsed="0.000186"/>
+</kw>
+<var name="${Cn}">ASCI Red</var>
+<var name="${Dt}">{'introduced': '-', 'discontinued': '-', 'company': '-'}</var>
+<status status="PASS" start="2025-04-04T21:29:57.631472" elapsed="0.000302"/>
+</iter>
+<iter>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.632040" level="INFO">ASCI Thors Hammer: {'introduced': '-', 'discontinued': '-', 'company': '-'}</msg>
+<arg>${cn}: ${Dt}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.631932" elapsed="0.000143"/>
+</kw>
+<var name="${Cn}">ASCI Thors Hammer</var>
+<var name="${Dt}">{'introduced': '-', 'discontinued': '-', 'company': '-'}</var>
+<status status="PASS" start="2025-04-04T21:29:57.631857" elapsed="0.000250"/>
+</iter>
+<var>${Cn}</var>
+<var>${Dt}</var>
+<value>&amp;{Computers}</value>
+<status status="PASS" start="2025-04-04T21:29:57.628299" elapsed="0.003844"/>
+</for>
+<arg>&amp;{Computers}</arg>
+<doc>Log the computer data.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.628042" elapsed="0.004163"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.632418" level="INFO">{'ACE': {'introduced': '-', 'discontinued': '-', 'company': '-'}, 'AN/FSQ-32': {'introduced': '01 Jan 1960', 'discontinued': '-', 'company': 'IBM'}, 'AN/FSQ-7': {'introduced': '01 Jan 1958', 'discontinued': '-', 'company': 'IBM'}, 'APEXC': {'introduced': '-', 'discontinued': '-', 'company': '-'}, 'ARRA': {'introduced': '-', 'discontinued': '-', 'company': '-'}, 'ASCI Blue Mountain': {'introduced': '-', 'discontinued': '-', 'company': '-'}, 'ASCI Blue Pacific': {'introduced': '01 Jan 1998', 'discontinued': '-', 'company': 'IBM'}, 'ASCI Purple': {'introduced': '01 Jan 2005', 'discontinued': '-', 'company': 'IBM'}, 'ASCI Red': {'introduced': '-', 'discontinued': '-', 'company': '-'}, 'ASCI Thors Hammer': {'introduced': '-', 'discontinued': '-', 'company': '-'}}</msg>
+<arg>${Computers}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.632294" elapsed="0.000163"/>
+</kw>
+<kw name="Close All Browsers" owner="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.632638" elapsed="0.060063"/>
+</kw>
+<doc>Scraped computer data from the website and loging it as a nested dictionary.</doc>
+<tag>smoke</tag>
+<tag>work01</tag>
+<status status="PASS" start="2025-04-04T21:29:56.144820" elapsed="1.547982"/>
+</test>
+<status status="PASS" start="2025-04-04T21:29:55.999760" elapsed="1.693518"/>
+</suite>
+<suite id="s1-s1-s2" name="DynamicTable" source="/app/TestCases/DynamicTable.robot">
+<test id="s1-s1-s2-t1" name="Compare Chrome CPU-s Values For Equality" line="8">
+<kw name="Open Browser Dynamic Table" owner="DynamicTable" type="SETUP">
+<kw name="Open Browser With Chrome Headless" owner="imports">
+<kw name="Set Chrome Headless Options" owner="imports">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-04-04T21:29:57.698967" level="INFO">${chrome_options} = &lt;selenium.webdriver.chrome.options.Options object at 0x7f64f5473e50&gt;</msg>
+<var>${chrome_options}</var>
+<arg>sys.modules['selenium.webdriver'].ChromeOptions()</arg>
+<arg>sys, selenium.webdriver</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.698746" elapsed="0.000249"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--headless</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.699097" elapsed="0.000109"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--disable-gpu</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.699297" elapsed="0.000104"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--no-sandbox</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.699489" elapsed="0.000101"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--disable-dev-shm-usage</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.699710" elapsed="0.000099"/>
+</kw>
+<return>
+<value>${chrome_options}</value>
+<status status="PASS" start="2025-04-04T21:29:57.699857" elapsed="0.000048"/>
+</return>
+<msg time="2025-04-04T21:29:57.700017" level="INFO">${chrome_options} = &lt;selenium.webdriver.chrome.options.Options object at 0x7f64f5473e50&gt;</msg>
+<var>${chrome_options}</var>
+<status status="PASS" start="2025-04-04T21:29:57.698498" elapsed="0.001543"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:57.700339" level="INFO">Opening browser 'chrome' to base url 'http://uitestingplayground.com/dynamictable'.</msg>
+<arg>${URL}</arg>
+<arg>chrome</arg>
+<arg>options=${chrome_options}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2025-04-04T21:29:57.700150" elapsed="0.478841"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-04-04T21:29:58.179293" elapsed="0.014632"/>
+</kw>
+<arg>${DynamicTable_URL}</arg>
+<status status="PASS" start="2025-04-04T21:29:57.698230" elapsed="0.495784"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-04-04T21:29:58.194160" elapsed="0.001556"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:29:57.698001" elapsed="0.497783"/>
+</kw>
+<kw name="Valid Dynamic Table Page" owner="DynamicTable">
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:58.206077" level="INFO">Current page contains text 'Dynamic Table'.</msg>
+<arg>Dynamic Table</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="PASS" start="2025-04-04T21:29:58.196175" elapsed="0.009958"/>
+</kw>
+<kw name="Page Should Contain Element" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:58.217327" level="INFO">Current page contains element '//span[contains(text(),'Chrome')]'.</msg>
+<arg>${CHROME_CELL}</arg>
+<doc>Verifies that element ``locator`` is found on the current page.</doc>
+<status status="PASS" start="2025-04-04T21:29:58.206248" elapsed="0.011189"/>
+</kw>
+<kw name="Page Should Contain Element" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:58.227777" level="INFO">Current page contains element '//p[@class='bg-warning']'.</msg>
+<arg>${CHROME_CPU_YELLOW_FLAG}</arg>
+<doc>Verifies that element ``locator`` is found on the current page.</doc>
+<status status="PASS" start="2025-04-04T21:29:58.217695" elapsed="0.010158"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:29:58.195950" elapsed="0.031985"/>
+</kw>
+<kw name="Chrome CPU Value Comparisson" owner="DynamicTable">
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:58.245899" level="INFO">${CHROME_CPU_CELL_VALUE} = 7.2%</msg>
+<var>${CHROME_CPU_CELL_VALUE}</var>
+<arg>${CHROME_CPU_CELL}</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:58.228411" elapsed="0.017525"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:58.255486" level="INFO">${CHROME_CPU_YELLOW_FLAG_VALUE} = Chrome CPU: 7.2%</msg>
+<var>${CHROME_CPU_YELLOW_FLAG_VALUE}</var>
+<arg>${CHROME_CPU_YELLOW_FLAG}</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:58.246089" elapsed="0.009426"/>
+</kw>
+<kw name="Fetch From Right" owner="String">
+<msg time="2025-04-04T21:29:58.255806" level="INFO">${FETCHED_TEXT} =  7.2%</msg>
+<var>${FETCHED_TEXT}</var>
+<arg>${CHROME_CPU_YELLOW_FLAG_VALUE}</arg>
+<arg>:</arg>
+<doc>Returns contents of the ``string`` after the last occurrence of ``marker``.</doc>
+<status status="PASS" start="2025-04-04T21:29:58.255657" elapsed="0.000172"/>
+</kw>
+<kw name="Should Be Equal As Strings" owner="BuiltIn">
+<arg>${CHROME_CPU_CELL_VALUE}</arg>
+<arg>${FETCHED_TEXT.strip()}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" start="2025-04-04T21:29:58.255930" elapsed="0.000593"/>
+</kw>
+<kw name="Reload Page" owner="SeleniumLibrary">
+<doc>Simulates user reloading page.</doc>
+<status status="PASS" start="2025-04-04T21:29:58.256661" elapsed="0.045985"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:58.318974" level="INFO">${CHROME_CPU_CELL_VALUE1} = 5.3%</msg>
+<var>${CHROME_CPU_CELL_VALUE1}</var>
+<arg>${CHROME_CPU_CELL}</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:58.302919" elapsed="0.016101"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:29:58.329397" level="INFO">${CHROME_CPU_YELLOW_FLAG_VALUE1} = Chrome CPU: 5.3%</msg>
+<var>${CHROME_CPU_YELLOW_FLAG_VALUE1}</var>
+<arg>${CHROME_CPU_YELLOW_FLAG}</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:29:58.319214" elapsed="0.010221"/>
+</kw>
+<kw name="Fetch From Right" owner="String">
+<msg time="2025-04-04T21:29:58.329811" level="INFO">${FETCHED_TEXT1} =  5.3%</msg>
+<var>${FETCHED_TEXT1}</var>
+<arg>${CHROME_CPU_YELLOW_FLAG_VALUE1}</arg>
+<arg>:</arg>
+<doc>Returns contents of the ``string`` after the last occurrence of ``marker``.</doc>
+<status status="PASS" start="2025-04-04T21:29:58.329632" elapsed="0.000203"/>
+</kw>
+<kw name="Should Be Equal As Strings" owner="BuiltIn">
+<arg>${CHROME_CPU_CELL_VALUE1}</arg>
+<arg>${FETCHED_TEXT1.strip()}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" start="2025-04-04T21:29:58.329939" elapsed="0.000583"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:29:58.228127" elapsed="0.102463"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-04-04T21:30:01.330993" level="INFO">Slept 3 seconds.</msg>
+<arg>3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-04-04T21:29:58.330714" elapsed="3.000426"/>
+</kw>
+<kw name="Close Browser Dynamic Table" owner="DynamicTable" type="TEARDOWN">
+<kw name="Close All Browsers" owner="SeleniumLibrary">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" start="2025-04-04T21:30:01.331897" elapsed="0.062364"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:30:01.331515" elapsed="0.062856"/>
+</kw>
+<tag>dy00</tag>
+<tag>pc001</tag>
+<tag>smoke</tag>
+<tag>work01</tag>
+<status status="PASS" start="2025-04-04T21:29:57.697513" elapsed="3.696918"/>
+</test>
+<status status="PASS" start="2025-04-04T21:29:57.693804" elapsed="3.701098"/>
+</suite>
+<suite id="s1-s1-s3" name="ECommercePlatform" source="/app/TestCases/ECommercePlatform.robot">
+<test id="s1-s1-s3-t1" name="Adds Products To Cart In ECommerce Platform" line="8">
+<kw name="Open Browser ECommerce" owner="ECommercePlatform" type="SETUP">
+<kw name="Open Browser With Chrome Headless" owner="imports">
+<kw name="Set Chrome Headless Options" owner="imports">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-04-04T21:30:01.400698" level="INFO">${chrome_options} = &lt;selenium.webdriver.chrome.options.Options object at 0x7f64f51a7d90&gt;</msg>
+<var>${chrome_options}</var>
+<arg>sys.modules['selenium.webdriver'].ChromeOptions()</arg>
+<arg>sys, selenium.webdriver</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-04-04T21:30:01.400443" elapsed="0.000282"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--headless</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:30:01.400830" elapsed="0.000108"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--disable-gpu</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:30:01.401030" elapsed="0.000098"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--no-sandbox</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:30:01.401214" elapsed="0.000094"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--disable-dev-shm-usage</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:30:01.401394" elapsed="0.000093"/>
+</kw>
+<return>
+<value>${chrome_options}</value>
+<status status="PASS" start="2025-04-04T21:30:01.401533" elapsed="0.000052"/>
+</return>
+<msg time="2025-04-04T21:30:01.401713" level="INFO">${chrome_options} = &lt;selenium.webdriver.chrome.options.Options object at 0x7f64f51a7d90&gt;</msg>
+<var>${chrome_options}</var>
+<status status="PASS" start="2025-04-04T21:30:01.400259" elapsed="0.001477"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:01.402033" level="INFO">Opening browser 'chrome' to base url 'https://www.demoblaze.com/'.</msg>
+<arg>${URL}</arg>
+<arg>chrome</arg>
+<arg>options=${chrome_options}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2025-04-04T21:30:01.401845" elapsed="0.497872"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-04-04T21:30:01.900003" elapsed="0.017335"/>
+</kw>
+<arg>${ECommerce_URL}</arg>
+<status status="PASS" start="2025-04-04T21:30:01.400010" elapsed="0.517468"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-04-04T21:30:01.917722" elapsed="0.002465"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:30:01.399793" elapsed="0.520482"/>
+</kw>
+<kw name="Set Selenium Speed" owner="SeleniumLibrary">
+<arg>0.5s</arg>
+<doc>Sets the delay that is waited after each Selenium command.</doc>
+<status status="PASS" start="2025-04-04T21:30:01.920451" elapsed="0.000277"/>
+</kw>
+<kw name="Valid ECommerce Home Page" owner="ECommercePlatform">
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:02.933549" level="INFO">Current page contains text 'PRODUCT STORE'.</msg>
+<arg>PRODUCT STORE</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="PASS" start="2025-04-04T21:30:01.921243" elapsed="1.012470"/>
+</kw>
+<kw name="Page Should Contain Element" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:03.442480" level="INFO">Current page contains element '//div[@id="navbarExample"]'.</msg>
+<arg>${NAVBAR_CONTAINER}</arg>
+<doc>Verifies that element ``locator`` is found on the current page.</doc>
+<status status="PASS" start="2025-04-04T21:30:02.933946" elapsed="0.508711"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:30:01.920947" elapsed="1.521911"/>
+</kw>
+<kw name="Select Product1" owner="ECommercePlatform">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:03.443519" level="INFO">Clicking element '//a[@class='hrefch' and contains(text(), 'Samsung galaxy s6')]'.</msg>
+<arg>${PRODUCT1}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:30:03.443343" elapsed="1.155599"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:04.599467" level="INFO">Clicking element '//a[contains(text(), 'Add to cart')]'.</msg>
+<arg>${ADD_TO_CART}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:30:04.599201" elapsed="1.053029"/>
+</kw>
+<kw name="Handle Alert" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:05.652678" level="INFO">HANDLE::&lt;class 'NoneType'&gt;::None</msg>
+<arg>ACCEPT</arg>
+<doc>Handles the current alert and returns its message.</doc>
+<status status="PASS" start="2025-04-04T21:30:05.652476" elapsed="1.525231"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:07.178129" level="INFO">Opening url 'https://www.demoblaze.com/'</msg>
+<arg>${ECommerce_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2025-04-04T21:30:07.177935" elapsed="0.535634"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:30:03.443078" elapsed="4.270656"/>
+</kw>
+<kw name="Select Product2" owner="ECommercePlatform">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:07.714537" level="INFO">Clicking element '//a[@class='hrefch' and contains(text(), 'Nokia lumia 1520')]'.</msg>
+<arg>${PRODUCT2}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:30:07.714314" elapsed="1.183105"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:08.898009" level="INFO">Clicking element '//a[contains(text(), 'Add to cart')]'.</msg>
+<arg>${ADD_TO_CART}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:30:08.897723" elapsed="1.051336"/>
+</kw>
+<kw name="Handle Alert" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:09.949499" level="INFO">HANDLE::&lt;class 'NoneType'&gt;::None</msg>
+<arg>ACCEPT</arg>
+<doc>Handles the current alert and returns its message.</doc>
+<status status="PASS" start="2025-04-04T21:30:09.949315" elapsed="1.525224"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:11.475018" level="INFO">Opening url 'https://www.demoblaze.com/'</msg>
+<arg>${ECommerce_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2025-04-04T21:30:11.474827" elapsed="0.630323"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:30:07.713989" elapsed="4.391318"/>
+</kw>
+<kw name="Select Product3" owner="ECommercePlatform">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:12.106143" level="INFO">Clicking element '//a[@class='hrefch' and contains(text(), 'Nexus 6')]'.</msg>
+<arg>${PRODUCT3}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:30:12.105923" elapsed="1.121119"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:13.227564" level="INFO">Clicking element '//a[contains(text(), 'Add to cart')]'.</msg>
+<arg>${ADD_TO_CART}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:30:13.227301" elapsed="1.045580"/>
+</kw>
+<kw name="Handle Alert" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:14.273303" level="INFO">HANDLE::&lt;class 'NoneType'&gt;::None</msg>
+<arg>ACCEPT</arg>
+<doc>Handles the current alert and returns its message.</doc>
+<status status="PASS" start="2025-04-04T21:30:14.273127" elapsed="1.524741"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:15.798324" level="INFO">Opening url 'https://www.demoblaze.com/'</msg>
+<arg>${ECommerce_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2025-04-04T21:30:15.798118" elapsed="0.532545"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:30:12.105560" elapsed="4.225256"/>
+</kw>
+<kw name="Select Product4" owner="ECommercePlatform">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:16.331502" level="INFO">Clicking element '//a[@class='hrefch' and contains(text(), 'Samsung galaxy s7')]'.</msg>
+<arg>${PRODUCT4}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:30:16.331317" elapsed="1.158552"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:17.490379" level="INFO">Clicking element '//a[contains(text(), 'Add to cart')]'.</msg>
+<arg>${ADD_TO_CART}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:30:17.490134" elapsed="1.047263"/>
+</kw>
+<kw name="Handle Alert" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:18.537861" level="INFO">HANDLE::&lt;class 'NoneType'&gt;::None</msg>
+<arg>ACCEPT</arg>
+<doc>Handles the current alert and returns its message.</doc>
+<status status="PASS" start="2025-04-04T21:30:18.537678" elapsed="1.525289"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:20.063414" level="INFO">Opening url 'https://www.demoblaze.com/'</msg>
+<arg>${ECommerce_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2025-04-04T21:30:20.063212" elapsed="0.555836"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:30:16.331045" elapsed="4.288129"/>
+</kw>
+<kw name="Go To Checkout" owner="ECommercePlatform">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:20.619878" level="INFO">Clicking element '//a[@id='cartur']'.</msg>
+<arg>//a[@id='cartur']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:30:20.619706" elapsed="1.179950"/>
+</kw>
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>${PLACE_ORDER_BUTTON}</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" start="2025-04-04T21:30:21.799891" elapsed="0.509981"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-04-04T21:30:25.310449" level="INFO">Slept 3 seconds.</msg>
+<arg>3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-04-04T21:30:22.310119" elapsed="3.000458"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:30:20.619374" elapsed="4.691340"/>
+</kw>
+<kw name="Validate Products In Checkoutt" owner="ECommercePlatform">
+<kw name="Get WebElements" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:25.819924" level="INFO">${product_names} = [&lt;selenium.webdriver.remote.webelement.WebElement (session="c8de3d9829b1b2821613f7dda684d7ab", element="f.6D3260AEDC15DAC1D38E7DB7B297ADD0.d.4614BC0494C3693ACBFA34592335DA91.e.696")&gt;, &lt;selenium.webdri...</msg>
+<var>${product_names}</var>
+<arg>//tr[@class='success']//td[2]</arg>
+<doc>Returns a list of WebElement objects matching the ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:30:25.311202" elapsed="0.508784"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2025-04-04T21:30:25.820373" level="INFO">Length is 4.</msg>
+<arg>${product_names}</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2025-04-04T21:30:25.820193" elapsed="0.000229"/>
+</kw>
+<for flavor="IN">
+<iter>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:26.331509" level="INFO">${name} = Samsung galaxy s6</msg>
+<var>${name}</var>
+<arg>${product}</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:30:25.820832" elapsed="0.510737"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-04T21:30:26.332029" level="INFO">Is in Cart: Samsung galaxy s6</msg>
+<arg>Is in Cart: ${name}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-04T21:30:26.331863" elapsed="0.000207"/>
+</kw>
+<var name="${product}">&lt;selenium.webdriver.remote.webelement.WebElement (session="c8de3d9829b1b2821613f7dda684d7ab", element="f.6D3260AEDC15DAC1D38E7DB7B297ADD0.d.4614BC0494C3693ACBFA34592335DA91.e.696")&gt;</var>
+<status status="PASS" start="2025-04-04T21:30:25.820717" elapsed="0.511389"/>
+</iter>
+<iter>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:26.838558" level="INFO">${name} = Nexus 6</msg>
+<var>${name}</var>
+<arg>${product}</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:30:26.332308" elapsed="0.506345"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-04T21:30:26.839071" level="INFO">Is in Cart: Nexus 6</msg>
+<arg>Is in Cart: ${name}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-04T21:30:26.838876" elapsed="0.000245"/>
+</kw>
+<var name="${product}">&lt;selenium.webdriver.remote.webelement.WebElement (session="c8de3d9829b1b2821613f7dda684d7ab", element="f.6D3260AEDC15DAC1D38E7DB7B297ADD0.d.4614BC0494C3693ACBFA34592335DA91.e.697")&gt;</var>
+<status status="PASS" start="2025-04-04T21:30:26.332216" elapsed="0.506972"/>
+</iter>
+<iter>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:27.345868" level="INFO">${name} = Nokia lumia 1520</msg>
+<var>${name}</var>
+<arg>${product}</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:30:26.839489" elapsed="0.506431"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-04T21:30:27.346270" level="INFO">Is in Cart: Nokia lumia 1520</msg>
+<arg>Is in Cart: ${name}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-04T21:30:27.346108" elapsed="0.000202"/>
+</kw>
+<var name="${product}">&lt;selenium.webdriver.remote.webelement.WebElement (session="c8de3d9829b1b2821613f7dda684d7ab", element="f.6D3260AEDC15DAC1D38E7DB7B297ADD0.d.4614BC0494C3693ACBFA34592335DA91.e.698")&gt;</var>
+<status status="PASS" start="2025-04-04T21:30:26.839347" elapsed="0.506998"/>
+</iter>
+<iter>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:27.852752" level="INFO">${name} = Samsung galaxy s7</msg>
+<var>${name}</var>
+<arg>${product}</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:30:27.346553" elapsed="0.506258"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-04T21:30:27.853233" level="INFO">Is in Cart: Samsung galaxy s7</msg>
+<arg>Is in Cart: ${name}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-04T21:30:27.853041" elapsed="0.000240"/>
+</kw>
+<var name="${product}">&lt;selenium.webdriver.remote.webelement.WebElement (session="c8de3d9829b1b2821613f7dda684d7ab", element="f.6D3260AEDC15DAC1D38E7DB7B297ADD0.d.4614BC0494C3693ACBFA34592335DA91.e.699")&gt;</var>
+<status status="PASS" start="2025-04-04T21:30:27.346459" elapsed="0.506866"/>
+</iter>
+<var>${product}</var>
+<value>@{product_names}</value>
+<status status="PASS" start="2025-04-04T21:30:25.820494" elapsed="2.032889"/>
+</for>
+<status status="PASS" start="2025-04-04T21:30:25.310943" elapsed="2.542532"/>
+</kw>
+<kw name="Close Browser ECommerce" owner="ECommercePlatform" type="TEARDOWN">
+<kw name="Close All Browsers" owner="SeleniumLibrary">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" start="2025-04-04T21:30:27.853921" elapsed="0.554274"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:30:27.853701" elapsed="0.554606"/>
+</kw>
+<tag>bug</tag>
+<status status="PASS" start="2025-04-04T21:30:01.399327" elapsed="27.009037"/>
+</test>
+<status status="PASS" start="2025-04-04T21:30:01.395380" elapsed="27.013410"/>
+</suite>
+<suite id="s1-s1-s4" name="ECommerceTest" source="/app/TestCases/ECommerceTest.robot">
+<test id="s1-s1-s4-t1" name="Add Multiple Products To Cart" line="7">
+<kw name="Open Browser And Navigate To URL" owner="ECommerceTest" type="SETUP">
+<kw name="Open Browser With Chrome Headless" owner="imports">
+<kw name="Set Chrome Headless Options" owner="imports">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-04-04T21:30:28.414373" level="INFO">${chrome_options} = &lt;selenium.webdriver.chrome.options.Options object at 0x7f64f4fe2690&gt;</msg>
+<var>${chrome_options}</var>
+<arg>sys.modules['selenium.webdriver'].ChromeOptions()</arg>
+<arg>sys, selenium.webdriver</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-04-04T21:30:28.414161" elapsed="0.000239"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--headless</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:30:28.414500" elapsed="0.000132"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--disable-gpu</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:30:28.414725" elapsed="0.000104"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--no-sandbox</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:30:28.414915" elapsed="0.000093"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--disable-dev-shm-usage</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:30:28.415093" elapsed="0.000090"/>
+</kw>
+<return>
+<value>${chrome_options}</value>
+<status status="PASS" start="2025-04-04T21:30:28.415230" elapsed="0.000047"/>
+</return>
+<msg time="2025-04-04T21:30:28.415376" level="INFO">${chrome_options} = &lt;selenium.webdriver.chrome.options.Options object at 0x7f64f4fe2690&gt;</msg>
+<var>${chrome_options}</var>
+<status status="PASS" start="2025-04-04T21:30:28.413975" elapsed="0.001423"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:28.415720" level="INFO">Opening browser 'chrome' to base url 'https://www.demoblaze.com/'.</msg>
+<arg>${URL}</arg>
+<arg>chrome</arg>
+<arg>options=${chrome_options}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2025-04-04T21:30:28.415508" elapsed="0.994030"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-04-04T21:30:29.409795" elapsed="0.514745"/>
+</kw>
+<arg>${URLi}</arg>
+<status status="PASS" start="2025-04-04T21:30:28.413730" elapsed="1.510983"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-04-04T21:30:29.924913" elapsed="0.502261"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//a[contains(text(), 'Home')]</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2025-04-04T21:30:30.427420" elapsed="1.017863"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:30:28.413437" elapsed="3.031993"/>
+</kw>
+<kw name="Set Selenium Speed" owner="SeleniumLibrary">
+<arg>0.5s</arg>
+<doc>Sets the delay that is waited after each Selenium command.</doc>
+<status status="PASS" start="2025-04-04T21:30:31.445676" elapsed="0.000283"/>
+</kw>
+<kw name="Add Products To Cart" owner="ECommerceTest">
+<kw name="Get WebElements" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:31.955515" level="INFO">${products} = [&lt;selenium.webdriver.remote.webelement.WebElement (session="4b21ad39959d4f555d250823051c0485", element="f.47621F243A40F039D206D49715C683C6.d.B4320740B36CA295FEF5A410AA4C6DB4.e.78")&gt;, &lt;selenium.webdriv...</msg>
+<var>${products}</var>
+<arg>${PRODUCT_TITLE_XPATH}</arg>
+<doc>Returns a list of WebElement objects matching the ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:30:31.446473" elapsed="0.509206"/>
+</kw>
+<kw name="Get Length" owner="BuiltIn">
+<msg time="2025-04-04T21:30:31.956104" level="INFO">Length is 9.</msg>
+<msg time="2025-04-04T21:30:31.956186" level="INFO">${total_products} = 9</msg>
+<var>${total_products}</var>
+<arg>${products}</arg>
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<status status="PASS" start="2025-04-04T21:30:31.955916" elapsed="0.000297"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-04T21:30:31.956454" level="INFO">Found 9 products</msg>
+<arg>Found ${total_products} products</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-04T21:30:31.956343" elapsed="0.000148"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<kw name="Fail" owner="BuiltIn">
+<msg time="2025-04-04T21:30:31.957012" level="FAIL">Requested more products than available</msg>
+<arg>Requested more products than available</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="FAIL" start="2025-04-04T21:30:31.956845" elapsed="0.000300">Requested more products than available</status>
+</kw>
+<arg>${number_of_products} &lt; ${total_products}</arg>
+<arg>Fail</arg>
+<arg>Requested more products than available</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="FAIL" start="2025-04-04T21:30:31.956619" elapsed="0.000584">Requested more products than available</status>
+</kw>
+<for flavor="IN RANGE">
+<iter>
+<kw name="Get WebElement" owner="SeleniumLibrary">
+<var>${current_product}</var>
+<arg>${PRODUCT_TITLE_XPATH}[${i}]</arg>
+<doc>Returns the first WebElement matching the given ``locator``.</doc>
+<status status="NOT RUN" start="2025-04-04T21:30:31.957464" elapsed="0.000023"/>
+</kw>
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>${current_product}</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-04-04T21:30:31.957580" elapsed="0.000037"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>${current_product}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-04-04T21:30:31.957711" elapsed="0.000021"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=${ADD_TO_CART_XPATH}</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="NOT RUN" start="2025-04-04T21:30:31.957814" elapsed="0.000019"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=${ADD_TO_CART_XPATH}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-04-04T21:30:31.957910" elapsed="0.000020"/>
+</kw>
+<kw name="Handle Alert" owner="SeleniumLibrary">
+<doc>Handles the current alert and returns its message.</doc>
+<status status="NOT RUN" start="2025-04-04T21:30:31.958008" elapsed="0.000019"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<arg>${URLi}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="NOT RUN" start="2025-04-04T21:30:31.958100" elapsed="0.000020"/>
+</kw>
+<var name="${i}"/>
+<status status="NOT RUN" start="2025-04-04T21:30:31.957369" elapsed="0.000778"/>
+</iter>
+<var>${i}</var>
+<value>${number_of_products}</value>
+<status status="NOT RUN" start="2025-04-04T21:30:31.957273" elapsed="0.000906"/>
+</for>
+<arg>3</arg>
+<status status="FAIL" start="2025-04-04T21:30:31.446205" elapsed="0.512085">Requested more products than available</status>
+</kw>
+<kw name="Navigate To Checkout" owner="ECommerceTest">
+<status status="NOT RUN" start="2025-04-04T21:30:31.958422" elapsed="0.000027"/>
+</kw>
+<kw name="Validate Products In Checkout" owner="ECommerceTest">
+<status status="NOT RUN" start="2025-04-04T21:30:31.958574" elapsed="0.000037"/>
+</kw>
+<kw name="Close All Browsers" owner="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" start="2025-04-04T21:30:31.958789" elapsed="0.554146"/>
+</kw>
+<tag>bug</tag>
+<tag>pc001</tag>
+<status status="FAIL" start="2025-04-04T21:30:28.413015" elapsed="4.100021">Requested more products than available</status>
+</test>
+<status status="FAIL" start="2025-04-04T21:30:28.409277" elapsed="4.104202"/>
+</suite>
+<suite id="s1-s1-s5" name="OverlappedTextBox" source="/app/TestCases/OverlappedTextBox.robot">
+<test id="s1-s1-s5-t1" name="Enter Data To Overlapped Elements" line="8">
+<kw name="Open Browser Overlapped TextBox" owner="OverlappedTextBox" type="SETUP">
+<kw name="Open Browser With Chrome Headless" owner="imports">
+<kw name="Set Chrome Headless Options" owner="imports">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-04-04T21:30:32.519153" level="INFO">${chrome_options} = &lt;selenium.webdriver.chrome.options.Options object at 0x7f64f4fce0d0&gt;</msg>
+<var>${chrome_options}</var>
+<arg>sys.modules['selenium.webdriver'].ChromeOptions()</arg>
+<arg>sys, selenium.webdriver</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-04-04T21:30:32.518952" elapsed="0.000227"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--headless</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:30:32.519277" elapsed="0.000103"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--disable-gpu</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:30:32.519468" elapsed="0.000095"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--no-sandbox</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:30:32.519665" elapsed="0.000095"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--disable-dev-shm-usage</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:30:32.519845" elapsed="0.000091"/>
+</kw>
+<return>
+<value>${chrome_options}</value>
+<status status="PASS" start="2025-04-04T21:30:32.519982" elapsed="0.000043"/>
+</return>
+<msg time="2025-04-04T21:30:32.520131" level="INFO">${chrome_options} = &lt;selenium.webdriver.chrome.options.Options object at 0x7f64f4fce0d0&gt;</msg>
+<var>${chrome_options}</var>
+<status status="PASS" start="2025-04-04T21:30:32.518780" elapsed="0.001373"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:32.520438" level="INFO">Opening browser 'chrome' to base url 'http://uitestingplayground.com/overlapped'.</msg>
+<arg>${URL}</arg>
+<arg>chrome</arg>
+<arg>options=${chrome_options}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2025-04-04T21:30:32.520258" elapsed="0.952650"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-04-04T21:30:33.473178" elapsed="0.515036"/>
+</kw>
+<arg>${Overlapped_URL}</arg>
+<status status="PASS" start="2025-04-04T21:30:32.518523" elapsed="1.469842"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-04-04T21:30:33.988571" elapsed="0.502409"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:30:32.518315" elapsed="1.972790"/>
+</kw>
+<kw name="Valid Overlapped TextBox Page" owner="OverlappedTextBox">
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:35.503110" level="INFO">Current page contains text 'Overlapped Element'.</msg>
+<arg>Overlapped Element</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="PASS" start="2025-04-04T21:30:34.491577" elapsed="1.011682"/>
+</kw>
+<kw name="Page Should Contain Element" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:36.013266" level="INFO">Current page contains element '//input[@id = 'id']'.</msg>
+<arg>${ID_TEXTBOX}</arg>
+<doc>Verifies that element ``locator`` is found on the current page.</doc>
+<status status="PASS" start="2025-04-04T21:30:35.503585" elapsed="0.509825"/>
+</kw>
+<kw name="Page Should Contain Element" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:36.522357" level="INFO">Current page contains element '//input[@id='name']'.</msg>
+<arg>${NAME_TEXTBOX}</arg>
+<doc>Verifies that element ``locator`` is found on the current page.</doc>
+<status status="PASS" start="2025-04-04T21:30:36.013664" elapsed="0.508836"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:30:34.491322" elapsed="2.031329"/>
+</kw>
+<kw name="Fill ID And Name Textboxs With Data" owner="OverlappedTextBox">
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:36.523428" level="INFO">Typing text 'ID12345' into text field '//input[@id = 'id']'.</msg>
+<arg>${ID_TEXTBOX}</arg>
+<arg>${id}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:30:36.523236" elapsed="1.572433"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-04-04T21:30:43.096178" level="INFO">Slept 5 seconds.</msg>
+<arg>5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-04-04T21:30:38.095892" elapsed="5.000404"/>
+</kw>
+<kw name="Scroll Element Into View" owner="SeleniumLibrary">
+<arg>${SUBJECT_ELEMENT}</arg>
+<doc>Scrolls the element identified by ``locator`` into view.</doc>
+<status status="PASS" start="2025-04-04T21:30:43.096486" elapsed="1.280235"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:44.377208" level="INFO">Typing text 'FILAN' into text field '//input[@id='name']'.</msg>
+<arg>${NAME_TEXTBOX}</arg>
+<arg>${name}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:30:44.376953" elapsed="1.555398"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-04-04T21:30:50.932935" level="INFO">Slept 5 seconds.</msg>
+<arg>5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-04-04T21:30:45.932593" elapsed="5.000489"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:30:36.522903" elapsed="14.410299"/>
+</kw>
+<kw name="Close Browser Overlapped TextBox" owner="OverlappedTextBox" type="TEARDOWN">
+<kw name="Close All Browsers" owner="SeleniumLibrary">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" start="2025-04-04T21:30:50.933809" elapsed="0.556252"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:30:50.933510" elapsed="0.556700"/>
+</kw>
+<tag>work01</tag>
+<status status="PASS" start="2025-04-04T21:30:32.517892" elapsed="18.972389"/>
+</test>
+<status status="PASS" start="2025-04-04T21:30:32.514055" elapsed="18.976702"/>
+</suite>
+<suite id="s1-s1-s6" name="ProgressBar" source="/app/TestCases/ProgressBar.robot">
+<test id="s1-s1-s6-t1" name="Test Progress Bar Start/Stop At 75 Percentage" line="9">
+<kw name="Open Browser Progress Bar" owner="ProgressBar" type="SETUP">
+<kw name="Open Browser With Chrome Headless" owner="imports">
+<kw name="Set Chrome Headless Options" owner="imports">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-04-04T21:30:51.496491" level="INFO">${chrome_options} = &lt;selenium.webdriver.chrome.options.Options object at 0x7f64f5003e90&gt;</msg>
+<var>${chrome_options}</var>
+<arg>sys.modules['selenium.webdriver'].ChromeOptions()</arg>
+<arg>sys, selenium.webdriver</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-04-04T21:30:51.496255" elapsed="0.000263"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--headless</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:30:51.496648" elapsed="0.000146"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--disable-gpu</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:30:51.496896" elapsed="0.000100"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--no-sandbox</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:30:51.497105" elapsed="0.000096"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${chrome_options}</arg>
+<arg>add_argument</arg>
+<arg>--disable-dev-shm-usage</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-04-04T21:30:51.497287" elapsed="0.000119"/>
+</kw>
+<return>
+<value>${chrome_options}</value>
+<status status="PASS" start="2025-04-04T21:30:51.497454" elapsed="0.000045"/>
+</return>
+<msg time="2025-04-04T21:30:51.497616" level="INFO">${chrome_options} = &lt;selenium.webdriver.chrome.options.Options object at 0x7f64f5003e90&gt;</msg>
+<var>${chrome_options}</var>
+<status status="PASS" start="2025-04-04T21:30:51.496070" elapsed="0.001594"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:51.498004" level="INFO">Opening browser 'chrome' to base url 'http://uitestingplayground.com/progressbar'.</msg>
+<arg>${URL}</arg>
+<arg>chrome</arg>
+<arg>options=${chrome_options}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2025-04-04T21:30:51.497785" elapsed="1.100979"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-04-04T21:30:52.599032" elapsed="0.515097"/>
+</kw>
+<arg>${URL}</arg>
+<status status="PASS" start="2025-04-04T21:30:51.495810" elapsed="1.618465"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-04-04T21:30:53.114470" elapsed="0.502354"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:30:51.495534" elapsed="2.121439"/>
+</kw>
+<kw name="Valid Progress Bar Page" owner="ProgressBar">
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:54.629299" level="INFO">Current page contains text 'Progress Bar'.</msg>
+<arg>Progress Bar</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="PASS" start="2025-04-04T21:30:53.617555" elapsed="1.011878"/>
+</kw>
+<kw name="Page Should Contain Element" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:55.138804" level="INFO">Current page contains element '//button[@id='startButton']'.</msg>
+<arg>${START_BUTTON}</arg>
+<doc>Verifies that element ``locator`` is found on the current page.</doc>
+<status status="PASS" start="2025-04-04T21:30:54.629684" elapsed="0.509267"/>
+</kw>
+<kw name="Page Should Contain Element" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:55.647928" level="INFO">Current page contains element '//button[@id='stopButton']'.</msg>
+<arg>${STOP_BUTTON}</arg>
+<doc>Verifies that element ``locator`` is found on the current page.</doc>
+<status status="PASS" start="2025-04-04T21:30:55.139179" elapsed="0.508897"/>
+</kw>
+<kw name="Page Should Contain Element" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:56.159459" level="INFO">Current page contains element '//div[@id='progressBar']'.</msg>
+<arg>${PROGRESS_BAR}</arg>
+<doc>Verifies that element ``locator`` is found on the current page.</doc>
+<status status="PASS" start="2025-04-04T21:30:55.648332" elapsed="0.511297"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:30:53.617233" elapsed="2.542520"/>
+</kw>
+<kw name="Click Start Button And Stop Button At 75Percent" owner="ProgressBar">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:30:56.160495" level="INFO">Clicking element '//button[@id='startButton']'.</msg>
+<arg>${START_BUTTON}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-04-04T21:30:56.160302" elapsed="1.052229"/>
+</kw>
+<kw name="Wait Until Element Contains" owner="SeleniumLibrary">
+<msg time="2025-04-04T21:31:53.549819" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-1.png"&gt;&lt;img src="selenium-screenshot-1.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2025-04-04T21:31:53.549981" level="FAIL">Element '//div[@id='progressBar']' did not get text '75%' in 55 seconds.</msg>
+<arg>${PROGRESS_BAR}</arg>
+<arg>75%</arg>
+<arg>timeout=55s</arg>
+<doc>Waits until the element ``locator`` contains ``text``.</doc>
+<status status="FAIL" start="2025-04-04T21:30:57.212826" elapsed="56.337941">Element '//div[@id='progressBar']' did not get text '75%' in 55 seconds.</status>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>${STOP_BUTTON}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-04-04T21:31:53.550959" elapsed="0.000032"/>
+</kw>
+<status status="FAIL" start="2025-04-04T21:30:56.159993" elapsed="57.391095">Element '//div[@id='progressBar']' did not get text '75%' in 55 seconds.</status>
+</kw>
+<kw name="Close Browser Proggres Bar" owner="ProgressBar" type="TEARDOWN">
+<kw name="Close All Browsers" owner="SeleniumLibrary">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" start="2025-04-04T21:31:53.551543" elapsed="0.553802"/>
+</kw>
+<status status="PASS" start="2025-04-04T21:31:53.551321" elapsed="0.554141"/>
+</kw>
+<tag>pc001</tag>
+<tag>smoke</tag>
+<tag>work01</tag>
+<status status="FAIL" start="2025-04-04T21:30:51.495029" elapsed="62.610494">Element '//div[@id='progressBar']' did not get text '75%' in 55 seconds.</status>
+</test>
+<status status="FAIL" start="2025-04-04T21:30:51.491314" elapsed="62.614629"/>
+</suite>
+<status status="FAIL" start="2025-04-04T21:29:55.998898" elapsed="118.107678"/>
+</suite>
+<status status="FAIL" start="2025-04-04T21:29:55.977891" elapsed="118.129234"/>
+</suite>
+<statistics>
+<total>
+<stat pass="4" fail="2" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="1" skip="0">bug</stat>
+<stat pass="1" fail="0" skip="0">dy00</stat>
+<stat pass="1" fail="2" skip="0">pc001</stat>
+<stat pass="2" fail="1" skip="0">smoke</stat>
+<stat pass="3" fail="1" skip="0">work01</stat>
+</tag>
+<suite>
+<stat name="App" id="s1" pass="4" fail="2" skip="0">App</stat>
+<stat name="TestCases" id="s1-s1" pass="4" fail="2" skip="0">App.TestCases</stat>
+<stat name="ComputerDataBase" id="s1-s1-s1" pass="1" fail="0" skip="0">App.TestCases.ComputerDataBase</stat>
+<stat name="DynamicTable" id="s1-s1-s2" pass="1" fail="0" skip="0">App.TestCases.DynamicTable</stat>
+<stat name="ECommercePlatform" id="s1-s1-s3" pass="1" fail="0" skip="0">App.TestCases.ECommercePlatform</stat>
+<stat name="ECommerceTest" id="s1-s1-s4" pass="0" fail="1" skip="0">App.TestCases.ECommerceTest</stat>
+<stat name="OverlappedTextBox" id="s1-s1-s5" pass="1" fail="0" skip="0">App.TestCases.OverlappedTextBox</stat>
+<stat name="ProgressBar" id="s1-s1-s6" pass="0" fail="1" skip="0">App.TestCases.ProgressBar</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
