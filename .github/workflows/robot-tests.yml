@@ -8,7 +8,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: "0 */3 * * 1-5"  # Runs every 3 hours, Monday through Friday
+    - cron: "0 10 * * 1-5"  # Runs 10AM, Monday through Friday
   workflow_dispatch:
     inputs:
       TAGS:
@@ -52,7 +52,7 @@ jobs:
       - name: Build Docker Image
         run: |
           echo "Building Docker image from Dockerfile..."
-          docker build -t ${{ env.IMAGE }}:${{ env.VERSION }} -f .github/workflows/Dockerfile .
+          docker build --no-cache -t ${{ env.IMAGE }}:${{ env.VERSION }} -f .github/workflows/Dockerfile .
 
       - name: Run Tests - Dryrun
         run: |

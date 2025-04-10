@@ -1,0 +1,10 @@
+[
+    {
+        "name": "Robot Framework Tests",
+        "numberOfTests":6,
+        "language": "RobotFramework",
+        "nameofTestCases": ["ComputerDatabase", "DynamicTable", "EcommerceTest", "OverlappedTextBox", "ProgressBar"],
+        "AnyJsonData": false,
+        "additionalFeatures": null
+    }
+]
