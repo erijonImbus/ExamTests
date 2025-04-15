@@ -126,3 +126,11 @@ jobs:
           keep_files: false
           enable_jekyll: false
           exclude_assets: .github
+
+      # Upload the full reports directory (including the HTML file) as a downloadable artifact
+      - name: Upload Full Test Reports as Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: full-test-reports
+          path: output/run/
+          retention-days: 3
