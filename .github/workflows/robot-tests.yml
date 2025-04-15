@@ -106,7 +106,7 @@ jobs:
           path: output/run/
           retention-days: 3
 
-      - name: Publish HTML Reports
+      - name: Publish HTML Reports as Artifact (optional)
         uses: actions/upload-artifact@v4
         with:
           name: robot-test-reports
@@ -127,10 +127,9 @@ jobs:
           enable_jekyll: false
           exclude_assets: .github
 
-      # Upload the full reports directory (including the HTML file) as a downloadable artifact
-      - name: Upload Full Test Reports as Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: full-test-reports
-          path: output/run/
-          retention-days: 3
+      - name: Output GitHub Pages Report Link
+        if: always()
+        run: |
+          REPORT_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/log.html"
+          echo "👉 View the test report live at: $REPORT_URL"
+          echo "## ✅ [Click here to view Robot Framework Test Report]($REPORT_URL)" >> $GITHUB_STEP_SUMMARY
