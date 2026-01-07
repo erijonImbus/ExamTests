@@ -161,7 +161,7 @@ pipeline {
         }
     }
 
-    triggers {
-        cron("${params.BUILD_TIME ?: 'H 2 * * 1-5'}")
-    }
+    // triggers {
+    //     cron("${params.BUILD_TIME ?: 'H 2 * * 1-5'}")
+    // }
 }
