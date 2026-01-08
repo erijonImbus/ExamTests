@@ -7,8 +7,8 @@ on:
   pull_request:
     branches:
       - main
-  schedule:
-    - cron: "0 10 * * 1-5"  # Runs 10AM, Monday through Friday
+  # schedule:
+  #   - cron: "0 10 * * 1-5"  # Runs 10AM, Monday through Friday
   workflow_dispatch:
     inputs:
       TAGS:
